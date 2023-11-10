@@ -1,16 +1,13 @@
 import CountryList from "./components/CountryList";
 import Search from "./components/Search";
 import React, { useState, useEffect } from "react";
+import './app.css'
 
 function App() {
   const [countryList, setCountryList] = useState([]);
   const [inputmessage, setInputMessage] = useState(
     "List empty, use input to search a country"
   );
-
-  useEffect(() => {
-    console.log(countryList);
-  }, [countryList]);
 
   return (
     <>

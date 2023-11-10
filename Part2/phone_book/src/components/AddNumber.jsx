@@ -18,7 +18,7 @@ const AddNumber = ({ handleNameChange, handleNumberChange, handleSubmit }) =>
           <label>Number: 
             <input
               required
-              pattern="\+?\d{4,20}"
+              pattern="\+?[\d\-]{4,20}"
               minLength={4}
               maxLength={20}
               onChange={handleNumberChange}

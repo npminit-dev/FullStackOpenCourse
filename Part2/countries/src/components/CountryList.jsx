@@ -9,6 +9,10 @@ const CountryList = ({ countryList, inputmessage }) => {
     if(Array.isArray(countryList) && countryList.length === 1) setdetails(countryList[0])
   }, [countryList]);
 
+  useEffect(() => {
+    console.log(details);
+  }, [details]);
+
   return (     
     <>
       <ul>
@@ -19,7 +23,7 @@ const CountryList = ({ countryList, inputmessage }) => {
             <li>{ country.name }</li>
             <button onClick={() => setdetails({...country})}>DETAILS</button>
           </div>
-        ) : <p><i>info: { inputmessage }</i></p>
+        ) : <p><i>Info: { inputmessage }</i></p>
       }
       </ul>
       {

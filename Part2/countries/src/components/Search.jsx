@@ -10,16 +10,18 @@ const Search = ({ setCountryList, setInputMessage }) => {
       setCountryList([])
       setInputMessage('Input empty, write something in there')
     }
-    else axios(`https://restcountries.com/v3.1/name/${inputvalue}?fields=name,capital,languages,population,flags`)
+    else axios(`https://restcountries.com/v3.1/name/${inputvalue}?fields=name,capital,capitalInfo,languages,population,flags`)
       .then(countries => {
         if(countries.data.length > 9) {
           setCountryList([])
           setInputMessage('Too much matches, be more specific')
         } 
         else setCountryList(countries.data.map(country => {
+          console.log(country.capitalInfo.latlng.join(','))
           return { 
             name: country.name.official, 
             capital: country.capital.join(', '),
+            capitalcoords: country.capitalInfo.latlng.join(','),
             langs: Object.values(country.languages).join(', '),
             population: country.population,
             flag: country.flags.svg,
