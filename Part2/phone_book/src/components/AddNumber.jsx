@@ -1,4 +1,4 @@
-const AddNumber = ({ handleNameChange, handleNumberChange, handleSubmit }) => 
+const AddNumber = ({handleNameChange, handleNumberChange, handleSubmit}) =>
   (
     <form onSubmit={handleSubmit}>
       <h4>Add new</h4>
@@ -15,7 +15,7 @@ const AddNumber = ({ handleNameChange, handleNumberChange, handleSubmit }) =>
           </label>
         </div>
         <div>
-          <label>Number: 
+          <label>Number:
             <input
               required
               pattern="\+?[\d\-]{4,20}"

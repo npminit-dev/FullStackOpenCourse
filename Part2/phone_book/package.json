@@ -2,6 +2,7 @@
   "name": "phone_book",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^5.17.0",
@@ -10,7 +11,7 @@
     "axios": "^1.6.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -18,7 +19,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "json-server --watch db.json --port 3001"
+    "serve": "json-server --watch db.json --port 3001",
+    "lint": "eslint src/**/*.{js,jsx}"
   },
   "eslintConfig": {
     "extends": [
@@ -39,6 +41,9 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^8.53.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.33.2",
     "json-server": "^0.17.4"
   }
 }

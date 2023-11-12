@@ -1,14 +1,13 @@
 import React from 'react';
 import Person from './Person';
 
-const NumberList = ({ list, setPersons, setFiltered, setmessage }) => {
-
+const NumberList = ({list, setPersons, setFiltered, setmessage}) => {
   return (
     <>
       <h2>Numbers</h2>
       <ul>
         {list?.map((person) => (
-          <Person 
+          <Person
             key={person.id}
             id={person.id}
             name={person.name}

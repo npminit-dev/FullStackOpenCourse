@@ -1,18 +1,19 @@
-const Filter = ({ setList, defaultList }) => {
-
+const Filter = ({setList, defaultList}) => {
   const handleChange = (e) => {
-    let value = e.target.value.toLowerCase();
-    if(!value.length) setList(defaultList)
-    else setList( 
-      defaultList.filter(person => {
-        let lowercased = person.name.toLowerCase()
-        if(lowercased.startsWith(value)) return true
-        else return false
-      })
-    )
-  }
+    const value = e.target.value.toLowerCase();
+    if (!value.length) setList(defaultList);
+    else {
+      setList(
+          defaultList.filter((person) => {
+            const lowercased = person.name.toLowerCase();
+            if (lowercased.startsWith(value)) return true;
+            else return false;
+          }),
+      );
+    }
+  };
 
-  return ( 
+  return (
     <form>
       <label>
         filter:
@@ -22,8 +23,8 @@ const Filter = ({ setList, defaultList }) => {
           onChange={handleChange}
         ></input>
       </label>
-    </form> 
+    </form>
   );
-}
- 
+};
+
 export default Filter;

@@ -1,15 +1,14 @@
-import { deletePerson } from "../services/modules";
+import {deletePerson} from '../services/modules';
 
-const Person = ({ name, number, id, setPersons, setFiltered, setmessage }) => {
-
+const Person = ({name, number, id, setPersons, setFiltered, setmessage}) => {
   const handleClick = () => {
     deletePerson(id)
-      .then(() => {
-        setPersons(persons => persons.filter(person => person.id !== id))
-        setFiltered(persons => persons.filter(person => person.id !== id))
-        setmessage({ message: '"' + name + '" deleted correctly!', type: 'success' })
-      }).catch(() => setmessage({ message: 'error deleting!', type: 'error' }))
-  }
+        .then(() => {
+          setPersons((persons) => persons.filter((person) => person.id !== id));
+          setFiltered((persons) => persons.filter((person) => person.id !== id));
+          setmessage({message: '"' + name + '" deleted correctly!', type: 'success'});
+        }).catch(() => setmessage({   message: 'error deleting!', type: 'error'   }));
+  };
 
   return (
     <>
