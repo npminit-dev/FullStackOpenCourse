@@ -1,25 +1,24 @@
-import React, {useState, useEffect, useRef} from 'react';
-import AddNumber from './components/AddNumber';
-import NumberList from './components/NumberList';
-import Filter from './components/Filter';
-import Messages from './components/Messages';
-import {getAllPersons, addPerson, modifyPerson} from './services/modules';
+import React, { useState, useEffect, useRef } from "react";
+import AddNumber from "./components/AddNumber";
+import NumberList from "./components/NumberList";
+import Filter from "./components/Filter";
+import Messages from "./components/Messages";
+import { getAllPersons, addPerson, modifyPerson } from "./services/modules";
 
 const App = () => {
   const [persons, setPersons] = useState(null);
-  const [newName, setNewName] = useState('');
-  const [newNumber, setNewNumber] = useState('');
+  const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
   const [filtered, setFiltered] = useState([]);
-  const [message, setmessage] = useState({message: null, type: null});
+  const [message, setmessage] = useState({ message: null, type: null });
 
   const timer = useRef(null);
 
   useEffect(() => {
-    getAllPersons()
-        .then((persons) => {
-          setPersons(persons);
-          setFiltered(persons);
-        });
+    getAllPersons().then((persons) => {
+      setPersons(persons);
+      setFiltered(persons);
+    });
   }, []);
 
   const handleNameChange = (e) => setNewName(e.target.value);
@@ -33,24 +32,41 @@ const App = () => {
         do you want to replace the number?`);
       if (toReplace) {
         modifyPerson(newName, newNumber, persons)
-            .then((person) => {
-              const newList = persons.map((elem) => elem.name === person.name ? person : elem);
-              const newFilteredList = filtered.map((elem) => elem.name === person.name ? person : elem);
-              setPersons(newList);
-              setFiltered(newFilteredList);
-              setmessage({message: `"${person.name}" modified correctly!`, type: 'success'});
-            }).catch((err) => setmessage({message: `error modifying! -> ${err}`, type: 'error'}));
+          .then((person) => {
+            const newList = persons.map((elem) =>
+              elem.name === person.name ? person : elem
+            );
+            const newFilteredList = filtered.map((elem) =>
+              elem.name === person.name ? person : elem
+            );
+            setPersons(newList);
+            setFiltered(newFilteredList);
+            setmessage({
+              message: `"${person.name}" modified correctly!`,
+              type: "success",
+            });
+          })
+          .catch((err) =>
+            setmessage({ message: `error modifying! -> ${err}`, type: "error" })
+          );
       }
     } else {
-      addPerson({name: newName, number: newNumber})
-          .then((person) => {
-            const newList = persons?.concat(person);
-            setPersons(newList);
-            setFiltered(newList);
-            setmessage({message: '"' + person.name + '" added correctly!', type: 'success'});
-          }).catch((err) => {
-            setmessage({message: `error adding! -> ${err.response.data}`, type: 'error'});
+      addPerson({ name: newName, number: newNumber })
+        .then((person) => {
+          const newList = persons?.concat(person);
+          setPersons(newList);
+          setFiltered(newList);
+          setmessage({
+            message: '"' + person.name + '" added correctly!',
+            type: "success",
           });
+        })
+        .catch((err) => {
+          setmessage({
+            message: `error adding! -> ${err.response.data}`,
+            type: "error",
+          });
+        });
     }
   };
 
@@ -66,7 +82,12 @@ const App = () => {
           handleSubmit,
         }}
       ></AddNumber>
-      <NumberList list={filtered} setPersons={setPersons} setFiltered={setFiltered} setmessage={setmessage}></NumberList>
+      <NumberList
+        list={filtered}
+        setPersons={setPersons}
+        setFiltered={setFiltered}
+        setmessage={setmessage}
+      ></NumberList>
     </div>
   );
 };

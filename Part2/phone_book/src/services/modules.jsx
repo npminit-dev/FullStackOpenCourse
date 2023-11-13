@@ -20,6 +20,6 @@ export const deletePerson = (id) => {
 export const modifyPerson = (name, number, persons) => {
   const id = persons.find((per) => per.name === name).id;
   console.log(name, number, id);
-  const req = axios.put(`http://localhost:3001/api/persons`, {data: {id, newnumber: number}, headers: {'Content-Type': 'application/json'}});
+  const req = axios.put(`${prefix}persons`, {id, newnumber: number}, {headers: {'Content-Type': 'application/json'}} );
   return req.then((persons) => persons.data);
 };
