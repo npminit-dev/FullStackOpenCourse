@@ -11,8 +11,10 @@ blogRouter.get("/blogs", (req, res) => {
 });
 
 blogRouter.post("/blogs", (req, res) => {
-  console.log(req.body)
-  const blog = new blogModel(req.body);
+  let newBlogData = {...req.body}
+  if(!('likes' in newBlogData)) newBlogData['likes'] = 0
+  if(!('title' in newBlogData) || !('url' in newBlogData)) res.status(400).send()
+  const blog = new blogModel(newBlogData);
   blog.save().then((result) => {
     res.status(201).json(result);
   });
