@@ -1,4 +1,4 @@
-const { red, blue, success } = require('console-log-colors')
+const { red, blue, green } = require('console-log-colors')
 require('dotenv').config()
 
 const log = {

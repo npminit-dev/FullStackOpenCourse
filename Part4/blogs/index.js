@@ -3,8 +3,13 @@ const blogRouter = require('./routing/blogRoutes')
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const { MNGDB_KEY, PORT } = require('./env_vars')
+const { MNGDB_KEY, PORT, SECRET } = require('./env_vars')
 const morgan = require('morgan')
+const userRouter = require('./routing/userRoutes')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const { errorsMW, extractPersonMW } =  require('./utils/middlewares')
+require('express-async-errors')
 
 let app = express()
 
@@ -15,9 +20,9 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
 
-app.get('/', (req, res) => res.status(200).send('main path'))
-
-app.use('/api', blogRouter)
+app.use('/api', userRouter)
+app.use('/api', extractPersonMW, blogRouter)
+app.use('/api', errorsMW)
 
 app.listen(PORT, () => {
   log.success(`Server running on port ${PORT}`)

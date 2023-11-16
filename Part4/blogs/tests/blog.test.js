@@ -13,7 +13,7 @@ describe('blogs utils testing', () => {
   // getAllLikes
   test('all likes from a list of blogs', () => {
     let result = getAllLikes(blogs)
-    expect(result).toBe(2341)
+    expect(result).toBe(3832)
   })
 
   test('all likes from a empty', () => {
@@ -32,12 +32,12 @@ describe('blogs utils testing', () => {
   test('most liked blog from a list of blogs', () => {
     let result = favoriteBlog(blogs)
     expect(result).toEqual({
-      _id: "5a432bc61b54a676234d17da",
-      title: "Relativity",
-      author: "Albert Einstein",
-      url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-      likes: 2300,
-      __v: 0
+      _id: "6555a32a22aa0ed4ed2b3654",
+      title: "About winning a WC",
+      author: "65558cea306e32758ff9c45d",
+      url: "https://afa.com.ar",
+      likes: 3321,
+      __v: 0,
     })
   })
 
@@ -57,8 +57,8 @@ describe('blogs utils testing', () => {
   test('most blogs by author from a list of blogs', () => {
     let result = mostBlogs(blogs)
     expect(result).toEqual({
-      author: "Robert C. Martin",
-      blogs: 3
+      author: "65558cea306e32758ff9c45d",
+      blogs: 2
     })
   })
 
@@ -78,8 +78,8 @@ describe('blogs utils testing', () => {
   test('most liked author from a blog list', () => {
     let result = getMostLikedAuthor(blogs)
     expect(result).toEqual({
-      author: "Albert Einstein",
-      likes: 2300
+      author: "65558cea306e32758ff9c45d",
+      likes: 3499
     })
   })
 
