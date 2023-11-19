@@ -1,13 +1,9 @@
 const blogRouter = require("express").Router();
 const { blogModel, userModel } = require('../mongodb/models')
 const mongoose = require("mongoose");
+require('express-async-errors')
 
 blogRouter.get('/', (req, res) => res.status(200).send('main api path'))
-
-blogRouter.get("/blogs", async (req, res) => {
-  let blogs = await blogModel.find({}).populate('author', { username: 1, name: 1})
-  res.status(200).json(blogs)
-});
 
 blogRouter.post("/blogs", async (req, res, next) => {
   let person = req.person
@@ -15,7 +11,7 @@ blogRouter.post("/blogs", async (req, res, next) => {
   if(!person) throw new Error('Token doesnt references any user')
   let newBlogData = {...req.body, author: person._id}
   if(!('likes' in newBlogData)) newBlogData['likes'] = 0
-  if(!('title' in newBlogData) || !('url' in newBlogData)) next(new Error('Incorrect body syntax'))
+  if(!('title' in newBlogData) || !('url' in newBlogData)) throw new Error('Incorrect body syntax')
   const blog = new blogModel(newBlogData);
   try {
     let result = await blog.save()

@@ -3,12 +3,11 @@ const blogRouter = require('./routing/blogRoutes')
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-const { MNGDB_KEY, PORT, SECRET } = require('./env_vars')
+const { MNGDB_KEY, PORT } = require('./env_vars')
 const morgan = require('morgan')
 const userRouter = require('./routing/userRoutes')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
 const { errorsMW, extractPersonMW } =  require('./utils/middlewares')
+const { blogModel } = require('./mongodb/models')
 require('express-async-errors')
 
 let app = express()
@@ -19,6 +18,11 @@ mongoose.connect(mongoUrl)
 app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
+
+app.get("/api/blogs", async (req, res) => {
+  let blogs = await blogModel.find({}).populate('author', { username: 1, name: 1})
+  res.status(200).json(blogs)
+});
 
 app.use('/api', userRouter)
 app.use('/api', extractPersonMW, blogRouter)

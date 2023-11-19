@@ -4,9 +4,9 @@
   "description": "blog app backend",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production cross-env index.js",
-    "test": "cross-env NODE_ENV=test cross-env jest --verbose --runInBand --silence=false",
-    "dev": "cross-env NODE_ENV=development cross-env nodemon index.js"
+    "start": "cross-env NODE_ENV=production index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand --silence=false",
+    "dev": "cross-env NODE_ENV=development nodemon index.js"
   },
   "jest": {
     "testEnvironment": "node",

@@ -1,9 +1,12 @@
 const userRouter = require('express').Router();
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-require('express-async-errors')
 const { SECRET } = require('../env_vars.js')
 const { userModel } = require('../mongodb/models');
+const express = require('express')
+require('express-async-errors')
+
+userRouter.use(express.json())
 
 userRouter.get('/users', async (req, res) => {
   let users = await userModel.find({}, { username: 1, name: 1 })
@@ -20,13 +23,29 @@ userRouter.post('/users/signin', async (req, res, next) => {
   if(!/^.{3,30}$/gm.test(body.password)) throw new Error('Invalid password')
   let hash = await bcrypt.hash(body.password, 5)
   body.password = hash
-  jwt.sign(body, SECRET, { expiresIn: '10days' }, async (_, token) => {
-    let newUser = new userModel({ ...body, hashedPassword: hash })
-    try {
-      await newUser.save()
+  let newUser = new userModel({ ...body, hashedPassword: hash })
+  try {
+    await newUser.save()
+    res.status(201).send('User registered!')
+  } catch (err) { throw new Error(`MongoDB Exception: ${err}`) }
+})
+
+userRouter.post('/users/login', async (req, res) => {
+  let body = req.body.data ? JSON.parse(req.body.data) : req.body
+  if(!body.username || !body.password) throw new Error('Incorrect body syntax')
+  let user = await userModel.findOne({ username: body.username }, { name: 1, username: 1, hashedPassword: 1 })
+  if(!user) throw new Error('Username not found')
+  let match = await bcrypt.compare(body.password, user.hashedPassword)
+  if(match) {
+    jwt.sign({
+      name: user.name,
+      username: user.username,
+      hashedPassword: user.hashedPassword
+    }, SECRET, { expiresIn: '10days' }, async (err, token) => {
+      if(err) throw new Error(`JWT sign error: ${err}`)
       res.status(200).send(token)
-    } catch (err) { next(new Error(`MongoDB Exception: ${err}`)) }
-  })
+    })
+  } else throw new Error('Incorrect password')
 })
 
 module.exports = userRouter

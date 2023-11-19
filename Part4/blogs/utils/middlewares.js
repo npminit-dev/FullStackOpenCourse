@@ -15,12 +15,16 @@ const errorsMW = (err, req, res, next) => {
   ) return res.status(400).send(`Bad Request: ${err}`)
 
   if(err.message === 'Error: blog not deleted'
+  || err.message.startsWith('JWT sign error')
   ) return res.status(404).send(err.message)
 
   if(err.message === 'Missing authorization header'
   || err.message === 'Auth headers must be "bearer" preceeded'
   || err.message.startsWith('Jwt decoding error')
+  || err.message === 'Username not found' 
+  || err.message === 'Incorrect password'
   ) return res.status(401).send(err.message)
+
 }
 
 const extractPersonMW = (req, res, next) => {
