@@ -5,7 +5,6 @@ export const decodeJWT = (token: string) => {
     let data = jwtDecode(token)
     return data
   } catch(error) {
-    console.log(error)
-    return null
+    return error
   }
 }

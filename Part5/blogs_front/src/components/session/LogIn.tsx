@@ -1,23 +1,18 @@
 import { LoginProps } from "../../types/types";
 import { FormEvent, useEffect, useState } from "react";
 import { log_in } from "../../utils/userRequests";
-import { decodeJWT } from "../../utils/utils";
+import { AxiosStatic } from "axios";
 
 const Login = ({ token, settoken, setmsg }: LoginProps) => {
   const [username, setusername] = useState<string>("");
   const [password, setpassword] = useState<string>("");
 
-  useEffect(() => {
-    console.log(username)
-    console.log(password)
-  }, [username, password]);
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if(username.trim() && password.trim()) {
-      let req = await log_in({ username, password })
-      if(req.status > 299 && req.status < 200) setmsg(`Error: ${req.status}`) 
-      else settoken(req.data)
+      let result: any = await log_in({ username, password })
+      if(result instanceof Error) setmsg(`Error: ${result.message} ${result.cause}`)
+      else settoken(result.data)
     }
   };
 

@@ -27,5 +27,22 @@ export type LoginBasicData = {
 export type Token = string
 
 export type BlogProps = {
+  blogs: Array<Blog>
+}
+
+export type Blog = {
+  title: string,
+  url: string,
+  likes: number
+}
+
+export type PostBlogProps = {
   token: string
+  setblogs: Dispatch<SetStateAction<Blog[]>>,
+  setmsg: Dispatch<SetStateAction<string|null>>
+}
+
+export type MessageProps = {
+  msg: string|null
+  setmsg: Dispatch<SetStateAction<string|null>>
 }

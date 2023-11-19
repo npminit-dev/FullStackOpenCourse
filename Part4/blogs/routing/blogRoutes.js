@@ -6,10 +6,12 @@ require('express-async-errors')
 blogRouter.get('/', (req, res) => res.status(200).send('main api path'))
 
 blogRouter.post("/blogs", async (req, res, next) => {
+  let data = req.body.data ? JSON.parse(req.body.data) : req.body
+  console.log(data)
   let person = req.person
   person = await userModel.findOne({ username: person.username, name: person.name })
   if(!person) throw new Error('Token doesnt references any user')
-  let newBlogData = {...req.body, author: person._id}
+  let newBlogData = {...data, author: person._id}
   if(!('likes' in newBlogData)) newBlogData['likes'] = 0
   if(!('title' in newBlogData) || !('url' in newBlogData)) throw new Error('Incorrect body syntax')
   const blog = new blogModel(newBlogData);
