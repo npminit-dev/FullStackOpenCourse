@@ -1,30 +1,22 @@
 import { useRef, useState, useEffect } from "react";
 import { MessageProps } from "../types/types";
+import '../App.css'
 
-const Messages = ({ msg, setmsg }: MessageProps) => {
+const Messages = ({ msg }: MessageProps) => {
 
-  const [visible, setvisible] = useState<boolean>(false);
-  const timer = useRef<null|NodeJS.Timeout>(null)
+  const msgElem = useRef<HTMLParagraphElement|null>(null)
 
   useEffect(() => {
-    timer.current && clearTimeout(timer.current)
-    if(msg) {
-      setvisible(true)
-      timer.current = setTimeout(() => {
-        setvisible(false)
-        setmsg(null)
-        timer.current && clearTimeout(timer.current)
-      }, 5000)
-    }
-    return () => {
-      timer.current && clearTimeout(timer.current)
-    }
+    msgElem.current?.getAnimations().forEach(anim => {
+      anim.cancel()
+      anim.play()
+    })
   }, [msg]);
 
   return ( 
     <>
     {
-      visible && msg ? <p>{ msg }</p> : <></>
+      msg ? <p className="msg" ref={msgElem}>{ msg.msg }</p> : <></>
     }
     </>
   );

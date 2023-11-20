@@ -2,7 +2,7 @@ const userRouter = require('express').Router();
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../env_vars.js')
-const { userModel } = require('../mongodb/models');
+const { userModel, blogModel } = require('../mongodb/models');
 const express = require('express')
 require('express-async-errors')
 
@@ -12,6 +12,12 @@ userRouter.get('/users', async (req, res) => {
   let users = await userModel.find({}, { username: 1, name: 1 })
     .populate('blogs', { title: 1, url: 1, author: 1 })
   res.status(200).send(users)
+})
+
+userRouter.get('/mix/blogs', async (req, res) => {
+  let blogs = await blogModel.find({}, { title: 1, url: 1, likes: 1 })
+    .populate('author', { username: 1 })
+  res.status(200).send(blogs)
 })
 
 userRouter.post('/users/signin', async (req, res, next) => {

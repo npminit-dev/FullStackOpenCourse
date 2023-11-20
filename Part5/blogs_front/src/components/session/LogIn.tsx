@@ -11,7 +11,7 @@ const Login = ({ token, settoken, setmsg }: LoginProps) => {
     e.preventDefault()
     if(username.trim() && password.trim()) {
       let result: any = await log_in({ username, password })
-      if(result instanceof Error) setmsg(`Error: ${result.message} ${result.cause}`)
+      if(result instanceof Error) setmsg({msg: `Error: ${result.message} ${result.cause}`, type: 'info'})
       else settoken(result.data)
     }
   };
@@ -26,7 +26,7 @@ const Login = ({ token, settoken, setmsg }: LoginProps) => {
         Password:
         <input type="password" pattern=".{3,30}" required onChange={({target}) => setpassword(target.value)} />
       </label>
-      <button type="submit" title="submit login">LOGIN</button>
+      <button type="submit" title="submit login">SUBMIT</button>
     </form>
   );
 };

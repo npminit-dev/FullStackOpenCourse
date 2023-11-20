@@ -42,9 +42,9 @@ blogRouter.delete('/blogs/:id', async (req, res) => {
 blogRouter.patch('/blogs/setlikes/:id?', async(req, res) => {
   let id = req.params.id
   let likes = req.query.likes
-  if(!likes) return res.status(304).send('No likes query settled')
+  if(!likes) throw new Error('No likes query settled')
   let newStatus = await blogModel.findOneAndUpdate({ _id: id }, { likes })
-  if(!newStatus) return res.status(304).send('ID not found')
+  if(!newStatus) throw new Error('ID not found')
   res.status(200).send(newStatus)
 })
 

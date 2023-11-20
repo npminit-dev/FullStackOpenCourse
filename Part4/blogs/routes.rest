@@ -12,6 +12,11 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pa
 GET http://localhost:3003/api/blogs
 ###
 
+// get blogs with author username
+GET http://localhost:3003/api/mix/blogs
+
+###
+
 // post a blog
 POST http://localhost:3003/api/blogs
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pY29sYXMgdGFnbGlhIiwibmFtZSI6Ik5pY29sYXMgVGFnaWFmaWNvIiwicGFzc3dvcmQiOiIkMmIkMDUkSWVTYTZoZmJNaW5lUHhsVFNEUnJOZVJsUk1JbEVqalNoQ05yM3BXTGZSUGNVOGNPU0xHbk8iLCJpYXQiOjE3MDAxMDU0NTAsImV4cCI6MTcwMDk2OTQ1MH0.CciNNivKxMCMY9teTMoSBFUNeiHvIHiE-hEHwly-ZYI

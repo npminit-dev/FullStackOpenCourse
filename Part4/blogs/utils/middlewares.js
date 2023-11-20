@@ -16,6 +16,8 @@ const errorsMW = (err, req, res, next) => {
 
   if(err.message === 'Error: blog not deleted'
   || err.message.startsWith('JWT sign error')
+  || err.message === 'No likes query settled'
+  || err.message === 'ID not found'
   ) return res.status(404).send(err.message)
 
   if(err.message === 'Missing authorization header'

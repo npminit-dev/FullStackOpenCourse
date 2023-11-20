@@ -1,8 +1,8 @@
 import { FormEvent, useState } from "react";
-import { PostBlogProps } from "../types/types";
+import { Blog, PostBlogProps } from "../types/types";
 import { post_Blog } from "../utils/userRequests";
 
-const PostBlog = ({ token, setblogs, setmsg }: PostBlogProps) => {
+const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
 
   const [title, settitle] = useState<string>('');
   const [url, seturl] = useState<string>('');
@@ -10,9 +10,14 @@ const PostBlog = ({ token, setblogs, setmsg }: PostBlogProps) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    let response = await post_Blog(token, { title, url, likes })
-    if(response.status > 299 || response.status < 200) setmsg(`Error: ${response.statusText}`)
-    else setblogs(blogs => blogs.concat(response.data))
+    let response: any = await post_Blog(token, { title, url, likes })
+    if(response.status > 299 || response.status < 200) setmsg({msg: `Error: ${response.statusText}`, type: 'info'})
+    else setblogs(blogs => {
+      let data = response.data
+      console.log(data)
+      let newBlog: Blog = { id: data.id, author: { username: user.username }, title: data.title, url: data.url, likes: data.likes }
+      return blogs.concat(newBlog)
+    })
   }
 
   return <>

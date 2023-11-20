@@ -9,7 +9,7 @@ const Session = ({ user, setuser, token, settoken, setmsg }: SessionProps) => {
     if (LS_token) {
       const result: any = decodeJWT(LS_token);
       if (result instanceof Error)
-        setmsg(`Error: ${result.message} ${result.cause}`);
+        setmsg({msg: `Error: ${result.message} ${result.cause}`, type: 'info'});
       else {
         settoken(LS_token);
         setuser({ name: result.name, username: result.username });
