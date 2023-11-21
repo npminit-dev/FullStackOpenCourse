@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Blog, LoginBasicData } from '../types/types'
+import { BlogProps, LoginBasicData } from '../types/types'
 
 const BASE_URL = 'http://localhost:3003'
 
@@ -21,7 +21,7 @@ export const get_Blogs = () => {
   return axios.get(`${BASE_URL}/api/mix/blogs`)
 }
 
-export const post_Blog = (token: string, blog: Partial<Blog>) => {
+export const post_Blog = (token: string, blog: Partial<BlogProps>) => {
   return axios.post(`${BASE_URL}/api/blogs`, 
   { 
     headers: { 
@@ -32,9 +32,23 @@ export const post_Blog = (token: string, blog: Partial<Blog>) => {
   })
 }
 
-export const like_Blog = async (token: string, id: string, likes: number) => {
+export const like_Blog = (token: string, id: string, likes: number) => {
   try {
-    let requestObj = await axios.patch(`${BASE_URL}/api/blogs/setlikes/${id}?likes=${likes}`, {
+    let requestObj = axios.patch(`${BASE_URL}/api/blogs/setlikes/${id}?likes=${likes}`, 
+    {
+      headers: {
+        "Authorization": `bearer ${token}`
+      }
+    })
+    return requestObj
+  } catch(err) {
+    return err
+  }
+}
+
+export const remove_Blog = (token: string, blogID: string) => {
+  try {
+    let requestObj = axios.delete(`${BASE_URL}/api/blogs/${blogID}`, {
       headers: {
         "Authorization": `bearer ${token}`
       }

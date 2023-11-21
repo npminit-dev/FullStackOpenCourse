@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Blog, PostBlogProps } from "../types/types";
+import { BlogProps, PostBlogProps } from "../types/types";
 import { post_Blog } from "../utils/userRequests";
 
 const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
@@ -15,7 +15,7 @@ const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
     else setblogs(blogs => {
       let data = response.data
       console.log(data)
-      let newBlog: Blog = { id: data.id, author: { username: user.username }, title: data.title, url: data.url, likes: data.likes }
+      let newBlog: BlogProps = { id: data.id, author: { username: user.username }, title: data.title, url: data.url, likes: data.likes }
       return blogs.concat(newBlog)
     })
   }

@@ -30,7 +30,11 @@ const errorsMW = (err, req, res, next) => {
 }
 
 const extractPersonMW = (req, res, next) => {
-  let auth = req.body.headers.Authorization || req.headers.authorization;
+  let auth = null;
+  if(req?.headers?.Authorization) auth = req.headers.Authorization
+  if(req?.headers?.authorization) auth = req.headers.authorization
+  if(req?.body?.headers?.Authorization) auth = req.body.headers.Authorization
+  if(req?.body?.headers?.authorization) auth = req.body.headers.authorization
   if(!auth) throw new Error('Missing authorization header')
   if(!auth.startsWith('bearer')) throw new Error('Auth headers must be "bearer" preceeded')
   auth = auth.substring(7).trim()

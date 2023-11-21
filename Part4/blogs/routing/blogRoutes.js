@@ -7,7 +7,6 @@ blogRouter.get('/', (req, res) => res.status(200).send('main api path'))
 
 blogRouter.post("/blogs", async (req, res, next) => {
   let data = req.body.data ? JSON.parse(req.body.data) : req.body
-  console.log(data)
   let person = req.person
   person = await userModel.findOne({ username: person.username, name: person.name })
   if(!person) throw new Error('Token doesnt references any user')
@@ -28,7 +27,7 @@ blogRouter.post("/blogs", async (req, res, next) => {
 
 blogRouter.delete('/blogs/:id', async (req, res) => {
   let ps = req.person
-  ps = await userModel.findOne({ username: ps.username, name: ps.name, hashedPassword: ps.password })
+  ps = await userModel.findOne({ username: ps.username, name: ps.name, hashedPassword: ps.hashedPassword })
   if(!ps) throw new Error('JWT Error: user not found')
   let found = false
   let id = req.params.id;

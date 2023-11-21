@@ -16,7 +16,8 @@ export type LoginProps = {
 
 export type ToggleProps = {
   showtext: string,
-  hidetext: string
+  hidetext: string,
+  shownDefault: boolean
 }
 
 export type User = {
@@ -37,23 +38,31 @@ export type Message = {
 }
 
 export type BlogsProps = {
-  blogs: Array<Blog>
+  blogs: Array<BlogProps>,
+  token: string|null,
+  setmsg: Dispatch<SetStateAction<Message|null>>,
+  setblogs: Dispatch<SetStateAction<BlogProps[]>>,
+  user: User|null
 }
 
-export type Blog = {
+export type BlogProps = {
   id: string
   title: string,
   url: string,
   likes: number,
   author: {
     username: string
-  }
+  },
+  setmsg?: Dispatch<SetStateAction<Message|null>>,
+  token?: string|null,
+  setblogs?: Dispatch<SetStateAction<BlogProps[]>>,
+  user?: User|null
 }
 
 export type PostBlogProps = {
   user: User,
   token: string
-  setblogs: Dispatch<SetStateAction<Blog[]>>,
+  setblogs: Dispatch<SetStateAction<BlogProps[]>>,
   setmsg: Dispatch<SetStateAction<Message|null>>
 }
 

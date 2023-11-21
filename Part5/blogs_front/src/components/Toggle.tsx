@@ -1,8 +1,8 @@
 import { PropsWithChildren, useState } from "react";
 import { ToggleProps } from "../types/types";
 
-const Toggle = ({ children, hidetext, showtext }: PropsWithChildren<ToggleProps>) => {
-  const [visible, setvisible] = useState<boolean>(true);
+const Toggle = ({ children, hidetext, showtext, shownDefault }: PropsWithChildren<ToggleProps>) => {
+  const [visible, setvisible] = useState<boolean>(shownDefault);
 
   return (
     <>

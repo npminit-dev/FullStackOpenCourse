@@ -1,29 +1,36 @@
-import { useEffect } from "react";
 import { BlogsProps } from "../types/types";
-import { v4 as uuidv4 } from 'uuid';
-import Toggle from "./Toggle";
+import { v4 as uuidv4 } from "uuid";
 import Blog from "./Blog";
+import PropTypes from "prop-types";
 
-const Blogs = ({ blogs, token }: BlogsProps&{token: string|null}) => {
+const Blogs = ({ blogs, token, setmsg, setblogs, user }: BlogsProps) => {
 
-  useEffect(() => {
-    console.log(blogs)
-  }, [blogs]);
-
-  return ( 
+  return (
     <section>
       <hr></hr>
       <div>
-      {
-      blogs.map(blog => 
-        <span key={uuidv4()}>
-          <Blog {...blog} token={token}></Blog>
-        </span>
-      ) 
-      }
+        {blogs.map((blog) => (
+          <span key={uuidv4()}>
+            <Blog
+              {...blog}
+              token={token}
+              setblogs={setblogs}
+              setmsg={setmsg}
+              user={user}
+            ></Blog>
+          </span>
+        ))}
       </div>
     </section>
   );
+};
+
+Blogs.propTypes = {
+  blogs: PropTypes.array.isRequired,
+  token: PropTypes.string,
+  setmsg: PropTypes.func.isRequired,
+  setblogs: PropTypes.func.isRequired,
+  user: PropTypes.object
 }
- 
+
 export default Blogs;
