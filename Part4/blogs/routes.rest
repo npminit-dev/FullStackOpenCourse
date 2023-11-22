@@ -8,6 +8,8 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pa
 
 ###
 
+// BLOGS
+
 // get blogs
 GET http://localhost:3003/api/blogs
 ###
@@ -68,3 +70,9 @@ Content-Type: application/json
   "username": "MMasi",
   "password": "uzumymw"
 }
+
+###
+
+// TESTS
+
+GET http://localhost:3003/testUtils/resetDB

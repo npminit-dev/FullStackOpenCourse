@@ -21,6 +21,7 @@ userRouter.get('/mix/blogs', async (req, res) => {
 })
 
 userRouter.post('/users/signin', async (req, res, next) => {
+  console.log(req.body)
   let body = req.body;
   if(!body) throw new Error('No body received')
   if(!body.username || !body.name || !body.password) throw new Error('One or some properties has missing')

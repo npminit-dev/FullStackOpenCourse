@@ -8,25 +8,42 @@ const Login = ({ token, settoken, setmsg }: LoginProps) => {
   const [password, setpassword] = useState<string>("");
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    if(username.trim() && password.trim()) {
-      let result: any = await log_in({ username, password })
-      if(result instanceof Error) setmsg({msg: `Error: ${result.message} ${result.cause}`, type: 'info'})
-      else settoken(result.data)
+    e.preventDefault();
+    if (username.trim() && password.trim()) {
+      let result: any = await log_in({ username, password });
+      if (result instanceof Error)
+        setmsg({
+          msg: `Error: ${result.message} ${result.cause}`,
+          type: "info",
+        });
+      else settoken(result.data);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} id="loginform">
       <label>
         Username:
-        <input onChange={({ target }) => setusername(target.value)} required pattern="[\wáéíóúÁÉÍÓÚ ]{3,30}" />
+        <input
+          id="usernameinput"
+          onChange={({ target }) => setusername(target.value)}
+          required
+          pattern="[\wáéíóúÁÉÍÓÚ ]{3,30}"
+        />
       </label>
       <label>
         Password:
-        <input type="password" pattern=".{3,30}" required onChange={({target}) => setpassword(target.value)} />
+        <input
+          id="passwordinput"
+          type="password"
+          pattern=".{3,30}"
+          required
+          onChange={({ target }) => setpassword(target.value)}
+        />
       </label>
-      <button type="submit" title="submit login">SUBMIT</button>
+      <button id="loginsubmitbutton" type="submit" title="submit login">
+        SUBMIT
+      </button>
     </form>
   );
 };

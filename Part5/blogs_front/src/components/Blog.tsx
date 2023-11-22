@@ -1,10 +1,8 @@
-import '../App.css'
 import type { BlogProps } from '../types/types'
 import Toggle from './Toggle'
 import { like_Blog, remove_Blog } from '../utils/userRequests'
-import React from 'react'
 
-const Blog = (props: BlogProps): React.ReactNode => {
+const Blog = (props: BlogProps): JSX.Element => {
   const handleLikeIncrement = async (): Promise<any> => {
     const result = await like_Blog(props.token ?? '', props.id, props.likes + 1)
     if (result instanceof Error) {
@@ -36,15 +34,16 @@ const Blog = (props: BlogProps): React.ReactNode => {
   return (
     <>
       <div className="blogbox">
-        <span>Author: {props.author.username}</span>
-        <span>Title: {props.title}</span>
+        <span className='authorbox'>Author: {props.author.username}</span>
+        <span className='titlebox'>Title: {props.title}</span>
         <Toggle showtext="DETAILS" hidetext="HIDE DETAILS" shownDefault={false}>
-          <span>URL: {props.url}</span>
-          <span>
+          <span className='urlbox'>URL: {props.url}</span>
+          <span className='likesbox'>
             Likes: {props.likes}
             {
             props.token !== null &&
             <button
+              className='likebutton'
               title="Like blog Button"
               type="button"
               onClick={async () => await handleLikeIncrement()}

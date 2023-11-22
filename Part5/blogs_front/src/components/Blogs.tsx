@@ -8,7 +8,7 @@ const Blogs = ({ blogs, token, setmsg, setblogs, user }: BlogsProps) => {
   return (
     <section>
       <hr></hr>
-      <div>
+      <div id="blogscontainer">
         {blogs.map((blog) => (
           <span key={uuidv4()}>
             <Blog

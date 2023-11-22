@@ -15,6 +15,7 @@ const Toggle = ({ children, hidetext, showtext, shownDefault }: PropsWithChildre
         </>
       ) : (
         <button
+          className="showtextbox"
           type="button"
           onClick={() => setvisible(true)}
           title="show button"

@@ -18,6 +18,7 @@ const errorsMW = (err, req, res, next) => {
   || err.message.startsWith('JWT sign error')
   || err.message === 'No likes query settled'
   || err.message === 'ID not found'
+  || err.message.startsWith('Error restarting database')
   ) return res.status(404).send(err.message)
 
   if(err.message === 'Missing authorization header'
@@ -35,9 +36,10 @@ const extractPersonMW = (req, res, next) => {
   if(req?.headers?.authorization) auth = req.headers.authorization
   if(req?.body?.headers?.Authorization) auth = req.body.headers.Authorization
   if(req?.body?.headers?.authorization) auth = req.body.headers.authorization
+  auth = auth.replace(' ', '')
   if(!auth) throw new Error('Missing authorization header')
-  if(!auth.startsWith('bearer')) throw new Error('Auth headers must be "bearer" preceeded')
-  auth = auth.substring(7).trim()
+  if(!auth.startsWith('bearer') && !auth.startsWith('Bearer')) throw new Error('Auth headers must be "bearer" preceeded')
+  auth = auth.substring(7)
   try {
     let decoded = jwt.verify(auth, SECRET)
     req.person = decoded

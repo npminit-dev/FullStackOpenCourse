@@ -7,8 +7,10 @@ const { MNGDB_KEY, PORT } = require('./env_vars')
 const morgan = require('morgan')
 const userRouter = require('./routing/userRoutes')
 const { errorsMW, extractPersonMW } =  require('./utils/middlewares')
+const resetRouter = require('./routing/resetRouter')
 const { blogModel } = require('./mongodb/models')
 require('express-async-errors')
+require('dotenv').config();
 
 let app = express()
 
@@ -25,6 +27,11 @@ app.get("/api/blogs", async (req, res) => {
 });
 
 app.use('/api', userRouter)
+
+if (process.env.NODE_ENV === 'test') {
+  app.use('/testUtils', resetRouter)
+}
+
 app.use('/api', extractPersonMW, blogRouter)
 app.use('/api', errorsMW)
 
