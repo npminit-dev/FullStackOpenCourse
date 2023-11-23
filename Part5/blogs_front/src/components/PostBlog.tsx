@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useRef } from 'react';
 import { BlogProps, PostBlogProps } from "../types/types";
 import { post_Blog } from "../utils/userRequests";
 
@@ -6,6 +6,9 @@ const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
   const [title, settitle] = useState<string>("");
   const [url, seturl] = useState<string>("");
   const [likes, setlikes] = useState<number>(0);
+  const titleRef = useRef<HTMLInputElement|null>(null)
+  const urlRef = useRef<HTMLInputElement|null>(null)
+  const likesRef = useRef<HTMLInputElement|null>(null)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -25,6 +28,9 @@ const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
         };
         return blogs.concat(newBlog);
       });
+      if(titleRef.current) titleRef.current.value = ''
+      if(urlRef.current) urlRef.current.value = ''
+      if(likesRef.current) likesRef.current.value = ''
   };
 
   return (
@@ -33,6 +39,7 @@ const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
         <label>
           Title:
           <input
+            ref={titleRef}
             className="titleinput"
             required
             onChange={({ target }) => settitle(target.value)}
@@ -41,6 +48,7 @@ const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
         <label>
           URL:
           <input
+          ref={urlRef}
             className="urlinput"
             required
             onChange={({ target }) => seturl(target.value)}
@@ -49,12 +57,13 @@ const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
         <label>
           LIKES:
           <input
+          ref={likesRef}
             className="likesinput"
             onChange={({ target }) => setlikes(parseInt(target.value))}
             type="number"
           ></input>
         </label>
-        <button type="submit">POST</button>
+        <button id="postblog" type="submit">POST</button>
       </form>
     </>
   );

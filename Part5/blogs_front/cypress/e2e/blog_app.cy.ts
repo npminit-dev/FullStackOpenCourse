@@ -12,6 +12,26 @@ const newBlogData = {
   url: "hhtp://www.mipaginaweb.com.ar",
   likes: 178,
 };
+const newBlogData2 = {
+  title: "Messi: Winning a WC",
+  url: "hhtp://www.mipaginaweb2.com.ar",
+  likes: 156,
+};
+const newBlogData3 = {
+  title: "Messi: Retirement",
+  url: "hhtp://www.mipaginaweb3.com.ar",
+  likes: 66,
+};
+const newBlogData4 = {
+  title: "Messi: The beginning",
+  url: "hhtp://www.mipaginaweb4.com.ar",
+  likes: 23,
+};
+const newBlogData5 = {
+  title: "Messi: Being a family dad",
+  url: "hhtp://www.mipaginaweb5.com.ar",
+  likes: 1,
+};
 
 beforeEach(() => {
   localStorage.removeItem("lsssstkn");
@@ -52,7 +72,7 @@ describe("Session tests:", () => {
   });
 });
 
-describe.only("Blogs test:", () => {
+describe("Blogs test:", () => {
   it("Check if a logged user can create a blog", async () => {
     cy.get("#blogscontainer").children().should("have.length", 0);
     cy.request({
@@ -73,5 +93,34 @@ describe.only("Blogs test:", () => {
     });
   });
 
-  
+  it('Check multiple blogs creation', () => { 
+    cy.get('#usernameinput').type(userLoginData.username)   
+    cy.get('#passwordinput').type(userLoginData.password) 
+    cy.get('#loginsubmitbutton').click()
+
+    cy.get('.titleinput').type(newBlogData.title)
+    cy.get('.urlinput').type(newBlogData.url)
+    cy.get('.likesinput').type(`${newBlogData.likes}`)
+    cy.get('#postblog').click()
+
+    cy.get('.titleinput').type(newBlogData2.title)
+    cy.get('.urlinput').type(newBlogData2.url)
+    cy.get('.likesinput').type(`${newBlogData2.likes}`)
+    cy.get('#postblog').click()
+
+    cy.get('.titleinput').type(newBlogData3.title)
+    cy.get('.urlinput').type(newBlogData3.url)
+    cy.get('.likesinput').type(`${newBlogData3.likes}`)
+    cy.get('#postblog').click()
+
+    cy.get('.titleinput').type(newBlogData4.title)
+    cy.get('.urlinput').type(newBlogData4.url)
+    cy.get('.likesinput').type(`${newBlogData4.likes}`)
+    cy.get('#postblog').click()
+
+    cy.get('.titleinput').type(newBlogData5.title)
+    cy.get('.urlinput').type(newBlogData5.url)
+    cy.get('.likesinput').type(`${newBlogData5.likes}`)
+    cy.get('#postblog').click()
+  })
 });
