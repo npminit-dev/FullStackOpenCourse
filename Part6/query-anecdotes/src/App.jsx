@@ -2,12 +2,13 @@ import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { getAnecdotes, upvoteAnecdote } from "./utils/requests";
-import { useState } from 'react';
+import { notificationContext } from "./contexts/NotificationContextProvider";
+import { useContext } from "react";
 
 const App = () => {
   const queryClient = useQueryClient();
+  const { setmessage } = useContext(notificationContext);
 
-  const [message, setmessage] = useState('ready...');
   const query = useQuery({
     queryKey: ["anecdotes"],
     queryFn: getAnecdotes,
@@ -20,12 +21,12 @@ const App = () => {
     retry: 0,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["anecdotes"] }),
     onError: () => {
-      setmessage('Error upvoting!')
-    }
+      setmessage({ msg: "Error upvoting!" });
+    },
   });
 
   const handleVote = (data) => {
-    mutation.mutate({ id: data.id, votes: data.votes })
+    mutation.mutate({ id: data.id, votes: data.votes });
   };
 
   const anecdotes = [
@@ -39,10 +40,7 @@ const App = () => {
   return (
     <div>
       <h3>Anecdote app</h3>
-
-      <Notification message={message}/>
       <AnecdoteForm />
-
       {query.data &&
         query.data.map((anecdote) => (
           <div key={anecdote.id}>
@@ -53,6 +51,8 @@ const App = () => {
             </div>
           </div>
         ))}
+        <hr></hr>
+      <Notification />
     </div>
   );
 };

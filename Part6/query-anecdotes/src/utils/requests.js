@@ -3,7 +3,7 @@ import axios from 'axios'
 const BASE_URL = 'http://localhost:3001'
 
 export const addAnecdote = async (anecdote) => {
-  await axios.post(`${BASE_URL}/anecdotes`, {...anecdote})
+    await axios.post(`${BASE_URL}/anecdotes`, {...anecdote})
 }
 
 export const getAnecdotes = async () => {
