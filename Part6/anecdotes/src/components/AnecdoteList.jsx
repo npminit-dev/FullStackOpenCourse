@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { orderByVotes, setmsg, voteAnecdote } from "../reducers/anecdoteReducer";
+import { orderByVotes, setmsg, voteAnecdote, voteAsync } from "../reducers/anecdoteReducer";
+import { v4 } from 'uuid';
 
 const AnecdoteList = () => {
   const { anecdotes, filter } = useSelector((state) => state);
@@ -10,10 +11,8 @@ const AnecdoteList = () => {
     dispatch(orderByVotes());
   }, []);
 
-  const handleVote = (id) => {
-    dispatch(voteAnecdote(id));
-    dispatch(orderByVotes());
-    dispatch(setmsg(`You upvoted the id: ${id} post!`))
+  const handleVote = (id, votes) => {
+    dispatch(voteAsync(id, votes))
   };
 
   return (
@@ -24,11 +23,11 @@ const AnecdoteList = () => {
             return true;
         })
         .map((anecdote) => (
-          <div key={anecdote.id}>
+          <div key={v4()}>
             <div>{anecdote.content}</div>
             <div>
               has {anecdote.votes}
-              <button onClick={() => handleVote(anecdote.id)}>vote</button>
+              <button onClick={() => handleVote(anecdote.id, anecdote.votes)}>vote</button>
             </div>
           </div>
         ))}

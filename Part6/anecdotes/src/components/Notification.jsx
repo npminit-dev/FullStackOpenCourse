@@ -5,7 +5,6 @@ import '../App.css'
 
 const Notification = () => {
 
-  const dispatch = useDispatch()
   const { notification } = useSelector((state) => state);
   const timer = useRef(null);
   const divRef = useRef(null)
@@ -17,11 +16,7 @@ const Notification = () => {
     timer.current = globalThis.setTimeout(() => {
       divRef.current.classList.remove('showmsg')
       divRef.current.classList.add('hidemsg')
-    }, 3000);
-  }, [notification]);
-
-  useEffect(() => {
-    console.log(notification)
+    }, notification.delay * 1000);
   }, [notification]);
 
   const style = {
