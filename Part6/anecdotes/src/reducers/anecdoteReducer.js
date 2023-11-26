@@ -1,3 +1,5 @@
+import { createSlice } from '@reduxjs/toolkit'
+import produce from 'immer'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -20,54 +22,53 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
-  switch(action.type) {
-    case 'vote':
-      return state.map(note => {
-        if(action.payload === note.id) return { ...note, votes: note.votes + 1 }
+const anecdotesReducer = createSlice({
+  name: 'anecdotes',
+  initialState: initialState,
+  reducers: {
+    voteAnecdote: (state, action) => {
+      state.forEach(note => {
+        if(action.payload === note.id) note.votes++
         return note
       })
-    case 'orderByVotes':
-      return [...state].sort((a, b) => a.votes < b.votes ? -1 : 1)
-    case 'addNote': 
-      return state.concat(action.payload)
-    default: return state 
+    },
+    orderByVotes: (state) => {
+     state.sort((a, b) => a.votes < b.votes ? -1 : 1)
+    },
+    addAnecdote: (state, action) => {
+      return [...state, asObject(action.payload)]
+    }
   }
+})
+
+
+const filterReducer = createSlice({
+  name: 'filter',
+  initialState: '',
+  reducers: {
+    changeFilter (state, action) {
+      return action.payload
+    }
+  }
+})
+
+const notificationReducer = createSlice({
+  name: 'notification',
+  initialState: { msg: 'default message' },
+  reducers: {
+    setmsg(state, action) {
+      return { ...state, msg: action.payload }
+    }
+  }
+})
+
+export default  { 
+  anecdotesRedcr: anecdotesReducer.reducer,
+  filterRedcr: filterReducer.reducer,
+  notificationRedcr: notificationReducer.reducer
 }
 
-export const filterReducer = (state = '', action) => {
-  switch(action.type) {
-    case 'CHANGE_FILTER':
-      return action.payload;
-    default: return state
-  }
-}
+export const { addAnecdote, orderByVotes, voteAnecdote } = anecdotesReducer.actions
+export const { changeFilter } = filterReducer.actions
+export const { setmsg } = notificationReducer.actions
 
-export default { filterReducer, reducer }
-
-export function voteNote (id) {
-  return {
-    type: 'vote',
-    payload: id
-  }
-}
-
-export function addNewNote(note) {
-  return {
-    type: 'addNote',
-    payload: asObject(note)
-  }
-}
-
-export function orderByVotes() { 
-  return {
-    type: 'orderByVotes' 
-  }
-}
-
-export function changeFilter(filter) {
-  return {
-    type: 'CHANGE_FILTER',
-    payload: filter
-  }
-}

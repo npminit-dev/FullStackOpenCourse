@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
-import { addNewNote } from "../reducers/anecdoteReducer";
+import { addAnecdote } from "../reducers/anecdoteReducer";
+import { setmsg } from '../reducers/anecdoteReducer'
 
 const AnecdoteForm = () => {
 
@@ -7,7 +8,8 @@ const AnecdoteForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    dispatch(addNewNote(e.target.note.value))
+    dispatch(addAnecdote(e.target.note.value))
+    dispatch(setmsg('Note added!'))
   }
 
   return (
