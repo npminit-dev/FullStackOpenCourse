@@ -7,7 +7,6 @@ const Notification = () => {
   const { notification } = useContext(appContext)
 
   useEffect(() => {
-    console.log('asd')
     clearTimeout(timer.current);
     if (notification.msg !== "") {
       msgElem.current.style.display = "block";

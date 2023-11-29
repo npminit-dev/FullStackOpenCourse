@@ -4,8 +4,6 @@ const AnecdoteDetails = () => {
 
   const location = useLocation()
 
-  console.log(location.state)
-
   return ( <>
     {
       location && location.state ?
