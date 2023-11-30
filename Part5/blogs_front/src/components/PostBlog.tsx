@@ -1,8 +1,10 @@
-import { FormEvent, useState, useRef } from 'react';
+import { FormEvent, useState, useRef, Dispatch } from 'react';
 import { BlogProps, PostBlogProps } from "../types/types";
 import { post_Blog } from "../utils/userRequests";
+import { useDispatch } from 'react-redux';
+import { AppDispatch, postBlogAsync } from '../reduxstate/store';
 
-const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
+const PostBlog = ({ token, setmsg, user }: PostBlogProps) => {
   const [title, settitle] = useState<string>("");
   const [url, seturl] = useState<string>("");
   const [likes, setlikes] = useState<number>(0);
@@ -10,24 +12,34 @@ const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
   const urlRef = useRef<HTMLInputElement|null>(null)
   const likesRef = useRef<HTMLInputElement|null>(null)
 
+  const dispatch = useDispatch<AppDispatch>()
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    let response: any = await post_Blog(token, { title, url, likes });
-    if (response.status > 299 || response.status < 200)
-      setmsg({ msg: `Error: ${response.statusText}`, type: "info" });
-    else
-      setblogs((blogs) => {
-        let data = response.data;
-        console.log(data);
-        let newBlog: BlogProps = {
-          id: data.id,
-          author: { username: user.username },
-          title: data.title,
-          url: data.url,
-          likes: data.likes,
-        };
-        return blogs.concat(newBlog);
-      });
+    dispatch(postBlogAsync({
+      token,
+      blog: {
+        title,
+        url,
+        likes
+      }      
+    }))
+    // let response: any = await post_Blog(token, { title, url, likes });
+    // if (response.status > 299 || response.status < 200)
+    //   setmsg({ msg: `Error: ${response.statusText}`, type: "info" });
+    // else
+    //   setblogs((blogs) => {
+    //     let data = response.data;
+    //     console.log(data);
+    //     let newBlog: BlogProps = {
+    //       id: data.id,
+    //       author: { username: user.username },
+    //       title: data.title,
+    //       url: data.url,
+    //       likes: data.likes,
+    //     };
+    //     return blogs.concat(newBlog);
+    //   });
       if(titleRef.current) titleRef.current.value = ''
       if(urlRef.current) urlRef.current.value = ''
       if(likesRef.current) likesRef.current.value = ''
@@ -70,3 +82,5 @@ const PostBlog = ({ token, setblogs, setmsg, user }: PostBlogProps) => {
 };
 
 export default PostBlog;
+
+

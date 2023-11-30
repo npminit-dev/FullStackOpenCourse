@@ -1,41 +1,61 @@
-import './App.css'
-import React, { useEffect, useState } from 'react'
-import type { BlogProps, Message, Token, User } from './types/types'
-import Session from './components/session/Session'
-import Blogs from './components/Blogs'
-import { get_Blogs } from './utils/userRequests'
-import UserInfo from './components/session/UserInfo'
-import PostBlog from './components/PostBlog'
-import Messages from './components/Messages'
-import Toggle from './components/Toggle'
+import "./App.css";
+import React, { useEffect, useState } from "react";
+import type {
+  BlogProps,
+  BlogsProps,
+  LoginBasicData,
+  Message,
+  StoreProps,
+  Token,
+  User,
+} from "./types/types";
+import Session from "./components/session/Session";
+import Blogs from "./components/Blogs";
+import { get_Blogs } from "./utils/userRequests";
+import UserInfo from "./components/session/UserInfo";
+import PostBlog from "./components/PostBlog";
+import Messages from "./components/Messages";
+import Toggle from "./components/Toggle";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, getAllBlogsAsync } from "./reduxstate/store";
+import { AnyAction } from "@reduxjs/toolkit";
 
-function App (): React.ReactNode {
-  const [user, setuser] = useState<User | null>(null)
-  const [token, settoken] = useState<Token | null>(null)
-  const [msg, setmsg] = useState<Message | null>(null)
-  const [blogs, setblogs] = useState<BlogProps[]>([])
+function App(): React.ReactNode {
+  const [msg, setmsg] = useState<Message | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const blogs = useSelector<StoreProps, BlogProps[]>((state) => state.blogs);
+  const user = useSelector<StoreProps, User&{ token: string }>((state) => state.user);
 
   useEffect(() => {
-    get_Blogs()
-      .then(blogs => { setblogs(blogs.data) })
-      .catch(err => { setmsg(err) })
-  }, [])
+    dispatch(getAllBlogsAsync());
+  }, []);
 
-  return <div>
-    <h2>BLOGS</h2>
-    { msg !== null && <Messages msg={msg}></Messages> }
-    {
-    token === null || user === null
-      ? <Toggle showtext='LOGIN'hidetext='CLOSE'shownDefault>
-          <Session {...{ user, setuser, token, settoken, setmsg }}/>
+  return (
+    <div>
+      <h2>BLOGS</h2>
+      {msg !== null && <Messages msg={msg}></Messages>}
+      {!user.token || !user.name ? (
+        <Toggle showtext="LOGIN" hidetext="CLOSE" shownDefault>
+          <Session {...{ user, token: user.token, setmsg }} />
         </Toggle>
-      : <span>
+      ) : (
+        <span>
           <UserInfo {...user}></UserInfo>
-          <PostBlog {...{ user, setblogs, setmsg, token }}></PostBlog>
+          <PostBlog
+            user={{ name: user.name, username: user.username }}
+            setmsg={setmsg}
+            token={user.token}
+          ></PostBlog>
         </span>
-    }
-    <Blogs {...{ blogs, token, setmsg, setblogs, user }}></Blogs>
-  </div>
+      )}
+      <Blogs
+        blogs={blogs}
+        setmsg={setmsg}
+        token={user.token}
+        user={{ name: user.name, username: user.username }}
+      ></Blogs>
+    </div>
+  );
 }
 
-export default App
+export default App;

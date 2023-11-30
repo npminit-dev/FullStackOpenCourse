@@ -4,20 +4,20 @@ import Blog from "./Blog";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-const Blogs = ({ blogs, token, setmsg, setblogs, user }: BlogsProps) => {
+const Blogs = ({ blogs, token, setmsg, user }: BlogsProps) => {
 
   const [order, setorder] = useState<'asc'|'desc'>('asc');
 
   const handleClickSort = () => {
-    setblogs(blogs => {
-      let sorted =  blogs.toSorted((a, b) => {
-        if(a.likes > b.likes) return -1 
-        else return 1
-      })
-      if(order === 'desc') return sorted.toReversed() 
-      return sorted
-    })
-    setorder(order === 'asc' ? 'desc' : 'asc')
+    // setblogs(blogs => {
+    //   let sorted =  blogs.toSorted((a, b) => {
+    //     if(a.likes > b.likes) return -1 
+    //     else return 1
+    //   })
+    //   if(order === 'desc') return sorted.toReversed() 
+    //   return sorted
+    // })
+    // setorder(order === 'asc' ? 'desc' : 'asc')
   }
 
   return (
@@ -39,7 +39,6 @@ const Blogs = ({ blogs, token, setmsg, setblogs, user }: BlogsProps) => {
             <Blog
               {...blog}
               token={token}
-              setblogs={setblogs}
               setmsg={setmsg}
               user={user}
             ></Blog>
@@ -54,7 +53,6 @@ Blogs.propTypes = {
   blogs: PropTypes.array.isRequired,
   token: PropTypes.string,
   setmsg: PropTypes.func.isRequired,
-  setblogs: PropTypes.func.isRequired,
   user: PropTypes.object,
 };
 

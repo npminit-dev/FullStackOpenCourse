@@ -1,10 +1,8 @@
 import { Dispatch, SetStateAction } from "react"
 
 export type SessionProps = {
-  user: User|null,
-  setuser: Dispatch<SetStateAction<User|null>>,
+  user: User&{token: string},
   token: Token|null,
-  settoken: Dispatch<SetStateAction<Token|null>>,
   setmsg: Dispatch<SetStateAction<Message|null>>
 }
 
@@ -41,7 +39,6 @@ export type BlogsProps = {
   blogs: Array<BlogProps>,
   token: string|null,
   setmsg: Dispatch<SetStateAction<Message|null>>,
-  setblogs: Dispatch<SetStateAction<BlogProps[]>>,
   user: User|null
 }
 
@@ -55,17 +52,38 @@ export type BlogProps = {
   },
   setmsg?: Dispatch<SetStateAction<Message|null>>,
   token?: string|null,
-  setblogs?: Dispatch<SetStateAction<BlogProps[]>>,
   user?: User|null
 }
 
 export type PostBlogProps = {
   user: User,
-  token: string
-  setblogs: Dispatch<SetStateAction<BlogProps[]>>,
+  token: string,
   setmsg: Dispatch<SetStateAction<Message|null>>
 }
 
 export type MessageProps = {
   msg: Message|null
+}
+
+export type StoreProps = {
+  blogs: BlogProps[],
+  user: User&{token: string}
+}
+
+// store types: 
+
+export type postAsyncType = {
+  token: string, 
+  blog: Partial<BlogProps>
+}
+
+export type likePostAsyncType = {
+  token: string, 
+  id: string,
+  likes: number
+}
+
+export type removeBlogsAsyncType = {
+  token: string, 
+  id: string
 }

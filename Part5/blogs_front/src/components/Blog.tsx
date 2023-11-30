@@ -1,34 +1,26 @@
 import type { BlogProps } from '../types/types'
 import Toggle from './Toggle'
 import { like_Blog, remove_Blog } from '../utils/userRequests'
+import { useDispatch } from 'react-redux'
+import { AppDispatch, likeBlogAsync, removeBlogAsync } from '../reduxstate/store'
 
 const Blog = (props: BlogProps): JSX.Element => {
+
+  const dispatch = useDispatch<AppDispatch>()
+
   const handleLikeIncrement = async (): Promise<any> => {
-    const result = await like_Blog(props.token ?? '', props.id, props.likes + 1)
-    if (result instanceof Error) {
-      props.setmsg !== undefined && props.setmsg(
-        { msg: `Error: ${result.message}`, type: 'info' })
-    } else {
-      props.setblogs !== undefined && props.setblogs(blogs => blogs.map(blog => {
-        if (props.id === blog.id) {
-          const incrLikeBlog: BlogProps = { ...blog, likes: props.likes + 1 }
-          return incrLikeBlog
-        } else return blog
-      }))
-    }
+    dispatch(likeBlogAsync({
+      token: props.token || '',
+      id: props.id,
+      likes: props.likes + 1
+    }))
   }
 
   const handleRemove = async (): Promise<any> => {
-    const confirm = globalThis.confirm('Confirm blog removal?')
-    if (confirm) {
-      const result = await remove_Blog(props.token ?? '', props.id)
-      if (result instanceof Error) {
-        props.setmsg !== undefined && props.setmsg(
-          { msg: `Error: ${result.message}`, type: 'info' })
-      } else {
-        props.setblogs !== undefined && props.setblogs(blogs => blogs.filter(blog => blog.id !== props.id))
-      }
-    }
+    dispatch(removeBlogAsync({
+      token: props.token || '',
+      id: props.id
+    }))
   }
 
   return (
