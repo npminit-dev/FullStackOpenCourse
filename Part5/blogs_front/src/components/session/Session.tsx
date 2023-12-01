@@ -2,33 +2,21 @@ import { useEffect } from "react";
 import { SessionProps } from "../../types/types";
 import LogIn from "./LogIn";
 import { decodeJWT } from "../../utils/utils";
+import { AppDispatch, logWithStorage } from "../../reduxstate/store";
+import { useDispatch } from "react-redux";
 
-const Session = ({ user, setuser, token, settoken, setmsg }: SessionProps) => {
+const Session = ({ user }: SessionProps) => {
+
+  const dispatch = useDispatch<AppDispatch>()
+
   useEffect(() => {
-    let LS_token = globalThis.localStorage.getItem("lsssstkn");
-    if (LS_token) {
-      const result: any = decodeJWT(LS_token);
-      if (result instanceof Error)
-        setmsg({msg: `Error: ${result.message} ${result.cause}`, type: 'info'});
-      else {
-        settoken(LS_token);
-        setuser({ name: result.name, username: result.username });
-      }
-    }
+    dispatch(logWithStorage())
   }, []);
-
-  useEffect(() => {
-    if (token) {
-      let data: any = decodeJWT(token);
-      setuser(data ? { name: data.name, username: data.name } : null);
-      globalThis.localStorage.setItem("lsssstkn", token);
-    }
-  }, [token]);
 
   return (
     <section>
-      {!user || !token ? (
-        <LogIn {...{ token, settoken, setmsg }}></LogIn>
+      {!user || !user.token ? (
+        <LogIn></LogIn>
       ) : (
         <></>
       )}
@@ -37,3 +25,5 @@ const Session = ({ user, setuser, token, settoken, setmsg }: SessionProps) => {
 };
 
 export default Session;
+
+

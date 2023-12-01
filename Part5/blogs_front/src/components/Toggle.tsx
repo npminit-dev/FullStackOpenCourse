@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { ToggleProps } from "../types/types";
 
 const Toggle = ({ children, hidetext, showtext, shownDefault }: PropsWithChildren<ToggleProps>) => {

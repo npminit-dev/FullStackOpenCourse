@@ -3,6 +3,7 @@ import Toggle from './Toggle'
 import { like_Blog, remove_Blog } from '../utils/userRequests'
 import { useDispatch } from 'react-redux'
 import { AppDispatch, likeBlogAsync, removeBlogAsync } from '../reduxstate/store'
+import { useEffect } from 'react'
 
 const Blog = (props: BlogProps): JSX.Element => {
 

@@ -2,22 +2,17 @@ import { LoginProps } from "../../types/types";
 import { FormEvent, useEffect, useState } from "react";
 import { log_in } from "../../utils/userRequests";
 import { AxiosStatic } from "axios";
+import { useDispatch } from "react-redux";
+import { AppDispatch, loginAsync } from "../../reduxstate/store";
 
-const Login = ({ token, settoken, setmsg }: LoginProps) => {
+const Login = () => {
   const [username, setusername] = useState<string>("");
   const [password, setpassword] = useState<string>("");
+  const dispatch = useDispatch<AppDispatch>()
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (username.trim() && password.trim()) {
-      let result: any = await log_in({ username, password });
-      if (result instanceof Error)
-        setmsg({
-          msg: `Error: ${result.message} ${result.cause}`,
-          type: "info",
-        });
-      else settoken(result.data);
-    }
+    dispatch(loginAsync({username, password}))
   };
 
   return (

@@ -2,7 +2,7 @@ import { BlogsProps } from "../types/types";
 import { v4 as uuidv4 } from "uuid";
 import Blog from "./Blog";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Blogs = ({ blogs, token, setmsg, user }: BlogsProps) => {
 

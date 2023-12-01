@@ -2,14 +2,10 @@ import { Dispatch, SetStateAction } from "react"
 
 export type SessionProps = {
   user: User&{token: string},
-  token: Token|null,
-  setmsg: Dispatch<SetStateAction<Message|null>>
 }
 
 export type LoginProps = {
-  token: Token|null,
-  settoken: Dispatch<SetStateAction<Token|null>>,
-  setmsg: Dispatch<SetStateAction<Message|null>>
+  user: User&{token: string}
 }
 
 export type ToggleProps = {

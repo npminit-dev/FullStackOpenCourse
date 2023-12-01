@@ -2,23 +2,18 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import type {
   BlogProps,
-  BlogsProps,
-  LoginBasicData,
   Message,
   StoreProps,
-  Token,
   User,
 } from "./types/types";
 import Session from "./components/session/Session";
 import Blogs from "./components/Blogs";
-import { get_Blogs } from "./utils/userRequests";
 import UserInfo from "./components/session/UserInfo";
 import PostBlog from "./components/PostBlog";
 import Messages from "./components/Messages";
 import Toggle from "./components/Toggle";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, getAllBlogsAsync } from "./reduxstate/store";
-import { AnyAction } from "@reduxjs/toolkit";
 
 function App(): React.ReactNode {
   const [msg, setmsg] = useState<Message | null>(null);
@@ -59,3 +54,5 @@ function App(): React.ReactNode {
 }
 
 export default App;
+
+
