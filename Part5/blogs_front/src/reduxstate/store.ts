@@ -14,8 +14,10 @@ export const getAllBlogsAsync = createAsyncThunk(
 export const postBlogAsync = createAsyncThunk(
   'blogs/postblogsasync',
   async (data: postAsyncType) => {
-    let result = await post_Blog(data.token, data.blog)
-    return result.data
+    let userdata = decodeJWT(data.token) as User
+    let result = (await post_Blog(data.token, data.blog)).data
+    result.author = { id: result.author, username: userdata.username }
+    return result
   }
 )
 
@@ -70,7 +72,7 @@ export const blogsSlice = createSlice({
       return action.payload
     },
     addBlog: function(state, action) {
-      state.push(action.payload)
+      return state.concat(action.payload)
     },
     likeblog: function(state: BlogProps[], action) {
       state.forEach(blog => {

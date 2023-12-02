@@ -1,11 +1,28 @@
-import type { BlogProps } from '../types/types'
+import type { BlogProps, toggleStatus } from '../types/types'
 import Toggle from './Toggle'
 import { like_Blog, remove_Blog } from '../utils/userRequests'
 import { useDispatch } from 'react-redux'
 import { AppDispatch, likeBlogAsync, removeBlogAsync } from '../reduxstate/store'
-import { useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { blogsContext } from './contexts/BlogsContextProvider'
+
 
 const Blog = (props: BlogProps): JSX.Element => {
+  
+  const findState = (ts: toggleStatus[]) => ts.find(st => st.id === props.id)?.status || false
+
+  const { toggleStatus, dispatchToggleStatus } = useContext(blogsContext)
+  const [status, setstatus] = useState<boolean>(findState(toggleStatus));
+  
+  useEffect(() => {
+    setstatus(
+      findState(toggleStatus)
+    )
+  }, [toggleStatus]);
+
+  useEffect(() => {
+    console.log(props.author)
+  }, [props])
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -21,7 +38,7 @@ const Blog = (props: BlogProps): JSX.Element => {
     dispatch(removeBlogAsync({
       token: props.token || '',
       id: props.id
-    }))
+    })).then(() => dispatchToggleStatus({ type: 'remove', payload: props.id }))
   }
 
   return (
@@ -29,7 +46,7 @@ const Blog = (props: BlogProps): JSX.Element => {
       <div className="blogbox">
         <span className='authorbox'>Author: {props.author.username}</span>
         <span className='titlebox'>Title: {props.title}</span>
-        <Toggle showtext="DETAILS" hidetext="HIDE DETAILS" shownDefault={false}>
+        <Toggle showtext="DETAILS" hidetext="HIDE DETAILS" shown={status} parentId={props.id}>
           <span className='urlbox'>URL: {props.url}</span>
           <span className='likesbox'>
             Likes: {props.likes}

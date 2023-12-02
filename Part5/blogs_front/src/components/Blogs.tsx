@@ -2,11 +2,19 @@ import { BlogsProps } from "../types/types";
 import { v4 as uuidv4 } from "uuid";
 import Blog from "./Blog";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { blogsContext } from "./contexts/BlogsContextProvider";
 
 const Blogs = ({ blogs, token, setmsg, user }: BlogsProps) => {
 
   const [order, setorder] = useState<'asc'|'desc'>('asc');
+  const { toggleStatus, dispatchToggleStatus } = useContext(blogsContext)
+
+  useEffect(() => {
+    if(!toggleStatus.length && blogs.length) {
+      dispatchToggleStatus({ type: 'initialize', payload: blogs })
+    }
+  }, [blogs])
 
   const handleClickSort = () => {
     // setblogs(blogs => {

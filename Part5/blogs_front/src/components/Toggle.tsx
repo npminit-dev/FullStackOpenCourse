@@ -1,15 +1,17 @@
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { PropsWithChildren, useContext, useEffect, useRef, useState } from "react";
 import { ToggleProps } from "../types/types";
+import { blogsContext } from "./contexts/BlogsContextProvider";
 
-const Toggle = ({ children, hidetext, showtext, shownDefault }: PropsWithChildren<ToggleProps>) => {
-  const [visible, setvisible] = useState<boolean>(shownDefault);
+const Toggle = ({ children, hidetext, showtext, shown, parentId }: PropsWithChildren<ToggleProps>) => {
+
+  const { dispatchToggleStatus } = useContext(blogsContext)
 
   return (
     <>
-      {visible ? (
+      {shown ? (
         <>
           {children}
-          <button type="button" onClick={() => setvisible(false)}>
+          <button type="button" onClick={() => parentId && dispatchToggleStatus({ type: 'toggle', payload: parentId })}>
             {hidetext}
           </button>
         </>
@@ -17,7 +19,7 @@ const Toggle = ({ children, hidetext, showtext, shownDefault }: PropsWithChildre
         <button
           className="showtextbox"
           type="button"
-          onClick={() => setvisible(true)}
+          onClick={() => parentId && dispatchToggleStatus({ type: 'toggle', payload: parentId })}
           title="show button"
         >
           {showtext}

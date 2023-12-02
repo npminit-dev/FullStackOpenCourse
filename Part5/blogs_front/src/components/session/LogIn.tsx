@@ -8,7 +8,7 @@ import { AppDispatch, loginAsync } from "../../reduxstate/store";
 const Login = () => {
   const [username, setusername] = useState<string>("");
   const [password, setpassword] = useState<string>("");
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

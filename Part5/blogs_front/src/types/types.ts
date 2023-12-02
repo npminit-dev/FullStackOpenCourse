@@ -11,7 +11,8 @@ export type LoginProps = {
 export type ToggleProps = {
   showtext: string,
   hidetext: string,
-  shownDefault: boolean
+  shown: boolean,
+  parentId?: string
 }
 
 export type User = {
@@ -48,7 +49,8 @@ export type BlogProps = {
   },
   setmsg?: Dispatch<SetStateAction<Message|null>>,
   token?: string|null,
-  user?: User|null
+  user?: User|null,
+  toggleStatus: boolean
 }
 
 export type PostBlogProps = {
@@ -83,3 +85,20 @@ export type removeBlogsAsyncType = {
   token: string, 
   id: string
 }
+
+// context
+
+export type contextType = {
+  toggleStatus: toggleStatus[],
+  dispatchToggleStatus: Dispatch<Action>
+}
+export type toggleStatus = {
+  id: string,
+  status: boolean
+}
+export type State = toggleStatus[];
+export type Action =
+  | { type: "initialize"; payload: BlogProps[] }
+  | { type: "add", payload: string }
+  | { type: "remove"; payload: string }
+  | { type: "toggle"; payload: string };
