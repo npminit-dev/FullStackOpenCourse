@@ -1,10 +1,31 @@
 @font-face {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Lato', sans-serif;
   src: url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 }
 
+#app {
+  margin: 0px 15px;
+}
+
+button {
+  cursor: pointer
+}
+
+.centered-content {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Lato', sans-serif;
+  box-sizing: border-box;
 }
 
 .msg {

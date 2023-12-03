@@ -43,6 +43,17 @@ PATCH http://localhost:3003/api/blogs/setlikes/6555a32a22aa0ed4ed2b3654?likes=15
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiTWljaGFlbCBNYXNpIiwidXNlcm5hbWUiOiJNTWFzaSIsImhhc2hlZFBhc3N3b3JkIjoiJDJiJDA1JDNWaVJHQkNvOFgzdXJBQU5ZLk5DU3VnMXl2OC5pUWdUazVvajVldW5FY0lVdXZBQjQyemxpIiwiaWF0IjoxNzAwMzQ1MDE0LCJleHAiOjE3MDEyMDkwMTR9.YRx9CQwp_PFpT6yj6AgkyQEsDJ83AT4f6HXeza1rDk8
 ### 
 
+// comment (anonym)
+
+POST http://localhost:3003/api/blogs/comment/656cbc5273013dbf841d5a18
+Content-Type: application/json
+
+{
+  "commentBody": "very interesting!"
+}
+
+###
+
 // USERS
 
 // get all users
@@ -67,7 +78,7 @@ POST http://localhost:3003/api/users/login
 Content-Type: application/json
 
 {
-  "username": "MMasi",
+  "username": "Richard Harrison",
   "password": "uzumymw"
 }
 

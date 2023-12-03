@@ -1,8 +1,4 @@
-import { LoginProps } from "../../types/types";
-import { FormEvent, useContext, useEffect, useState } from "react";
-import { log_in } from "../../utils/userRequests";
-import { AxiosStatic } from "axios";
-import { useDispatch } from "react-redux";
+import { FormEvent, useContext, useState } from "react";
 import { loginAsync } from '../../reduxstate/store';
 import { appContext } from "../contexts/AppContextProvider";
 

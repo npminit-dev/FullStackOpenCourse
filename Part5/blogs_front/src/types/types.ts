@@ -56,6 +56,7 @@ export type BlogProps = {
   title: string,
   url: string,
   likes: number,
+  comments: Array<string>,
   author: {
     username: string
   },
@@ -78,6 +79,11 @@ export type MessageProps = {
 export type StoreProps = {
   blogs: BlogProps[],
   user: User&{token: string}
+}
+
+export type CommentType = {
+  comment: string, 
+  id: string
 }
 
 // store types: 
@@ -103,7 +109,7 @@ export type removeBlogsAsyncType = {
 export type AppContextType = {
   msg: Message|null,
   setmsg: Dispatch<SetStateAction<Message|null>>,
-  dispatch: Dispatch<AsyncThunkAction<any, any, any>>,
+  dispatch: Dispatch<AsyncThunkAction<any, any, any>|Action<any>>,
   blogs: BlogProps[],
   user: User&{token:string},
 }

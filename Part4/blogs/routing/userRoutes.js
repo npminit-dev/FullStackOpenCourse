@@ -15,7 +15,7 @@ userRouter.get('/users', async (req, res) => {
 })
 
 userRouter.get('/mix/blogs', async (req, res) => {
-  let blogs = await blogModel.find({}, { title: 1, url: 1, likes: 1 })
+  let blogs = await blogModel.find({}, { title: 1, url: 1, likes: 1, comments: 1 })
     .populate('author', { username: 1 })
   res.status(200).send(blogs)
 })

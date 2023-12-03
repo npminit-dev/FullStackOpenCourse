@@ -1,6 +1,6 @@
 import { PropsWithChildren, useState, createContext, useEffect } from "react";
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, getAllBlogsAsync } from "../../reduxstate/store";
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllBlogsAsync } from "../../reduxstate/store";
 import { AppContextType, BlogProps, Message, StoreProps, User } from "../../types/types";
 
 const defValues: AppContextType = {
@@ -16,7 +16,7 @@ export const appContext = createContext<AppContextType>(defValues)
 const AppContextProvider = ({children}: PropsWithChildren) => {
 
   const [msg, setmsg] = useState<Message | null>(null);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<any>();
   const blogs = useSelector<StoreProps, BlogProps[]>((state) => state.blogs);
   const user = useSelector<StoreProps, User & { token: string }>(
     (state) => state.user

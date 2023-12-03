@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { SessionProps } from "../../types/types";
 import LogIn from "./LogIn";
-import { AppDispatch, logWithStorage } from "../../reduxstate/store";
-import { useDispatch } from "react-redux";
+import { logWithStorage } from "../../reduxstate/store";
 import UserInfo from "./UserInfo";
 import { appContext } from "../contexts/AppContextProvider";
 

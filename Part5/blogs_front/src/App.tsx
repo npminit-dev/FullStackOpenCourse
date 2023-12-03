@@ -1,29 +1,42 @@
 import "./App.css";
-import React, { useContext, useEffect, useState } from "react";
-import type { BlogProps, Message, StoreProps, User } from "./types/types";
+import React, { useContext, useEffect } from "react";
 import Session from "./components/session/Session";
-import Blogs from "./components/Blogs";
 import UserInfo from "./components/session/UserInfo";
-import PostBlog from "./components/PostBlog";
 import Messages from "./components/Messages";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { AppDispatch, getAllBlogsAsync, store } from "./reduxstate/store";
-import Users from "./components/users/Users";
-import { Link, Outlet, Route, Routes } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { appContext } from "./components/contexts/AppContextProvider";
+import SiteHeader from "./components/SiteHeader";
+import { Container, Grid } from "semantic-ui-react";
 
 function App(): React.ReactNode {
-  const { msg, setmsg, dispatch, blogs, user } = useContext(appContext)
+  const { msg, user } = useContext(appContext)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    navigate('/blogs')
+  }, []);
 
   return (
-    <div>
-      <h2>APP-BLOGS</h2>
-      {msg !== null && <Messages msg={msg}></Messages>}
-      {!user.token || !user.name ? (
-        <Session/>
-      ) : (
-        <UserInfo {...user}></UserInfo>
-      )}
+    <div id="app">
+      <Grid divided='vertically' stackable={true} verticalAlign="middle" className="no-margin">
+        <Grid.Row columns={2}>
+          <Grid.Column width={6}>
+            <Container fluid={false}>
+              <SiteHeader></SiteHeader>
+            </Container>
+          </Grid.Column>
+          <Grid.Column width={6} floated="right">
+            <Container fluid={false} className="centered-content">
+              {msg !== null && <Messages msg={msg}></Messages>}
+              {!user.token || !user.name ? (
+                <Session/>
+              ) : (
+                <UserInfo {...user}></UserInfo>
+              )}
+            </Container>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
       <Link to="/users"><div>USERS</div></Link>
       <Link to='/blogs'><div>BLOGS</div></Link>
       <Outlet></Outlet>

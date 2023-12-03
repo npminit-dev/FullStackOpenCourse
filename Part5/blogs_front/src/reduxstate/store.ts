@@ -1,10 +1,10 @@
 import { configureStore, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { BASE_URL, get_Blogs, like_Blog, log_in, post_Blog, remove_Blog } from '../utils/userRequests.js'
-import { BlogProps, LoginBasicData, PostBlogProps, User, likePostAsyncType, postAsyncType, removeBlogsAsyncType } from '../types/types.js';
+import { commentBlog, get_Blogs, like_Blog, log_in, post_Blog, remove_Blog } from '../utils/userRequests.js'
+import { BlogProps, CommentType, LoginBasicData, User, likePostAsyncType, postAsyncType, removeBlogsAsyncType } from '../types/types.js';
 import { decodeJWT } from '../utils/utils.js';
 
 export const getAllBlogsAsync = createAsyncThunk(
-  'blogs/getallblogsasync',
+  'blogs/getAllBlogsAsync',
   async () => {
     let blogs = await get_Blogs()
     return blogs.data
@@ -12,7 +12,7 @@ export const getAllBlogsAsync = createAsyncThunk(
 )
 
 export const postBlogAsync = createAsyncThunk(
-  'blogs/postblogsasync',
+  'blogs/postBlogAsync',
   async (data: postAsyncType) => {
     let userdata = decodeJWT(data.token) as User
     let result = (await post_Blog(data.token, data.blog)).data
@@ -22,7 +22,7 @@ export const postBlogAsync = createAsyncThunk(
 )
 
 export const likeBlogAsync = createAsyncThunk(
-  'blogs/likeblogasync',
+  'blogs/likeBlogAsync',
   async (data: likePostAsyncType) => {
     if(!data.token || !data.id) {
       console.log('token or id not found')
@@ -34,10 +34,18 @@ export const likeBlogAsync = createAsyncThunk(
 )
 
 export const removeBlogAsync = createAsyncThunk(
-  'blogs/removeblogasync',
+  'blogs/removeBlogAsync',
   async (data: removeBlogsAsyncType) => {
     let result = await remove_Blog(...Object.values(data) as [string, string])
     return result.data
+  }
+)
+
+export const commentBlogAsync = createAsyncThunk(
+  'blogs/commentBlogAsync',
+  async (data: CommentType) => {
+    let result = await commentBlog(data.comment, data.id)
+    return {id: data.id, comments: result.data.comments}
   }
 )
 
@@ -99,6 +107,14 @@ export const blogsSlice = createSlice({
     builder.addCase(removeBlogAsync.fulfilled, (state, action) => {
       return state.filter(blog => blog.id !== action.payload.id)
     })
+    builder.addCase(commentBlogAsync.fulfilled, (state, action) => {
+      return state.map(blog => {
+        if(blog.id === action.payload.id) {
+          return {...blog, comments: action.payload.comments}
+        }
+        return blog
+      })
+    })
   }
 })
 
@@ -112,6 +128,10 @@ export const userSlice = createSlice({
       let userdata = decodeJWT(token)
       if(userdata instanceof Error) return
       return {token, ...userdata}
+    },
+    logOutUser: function() {
+      localStorage.removeItem('lsssstkn');
+      return {name: '', token: '', username: ''}
     }
   },
   extraReducers: (builder) => {
@@ -121,7 +141,7 @@ export const userSlice = createSlice({
   }
 })
 
-export const store = configureStore({
+export const store = configureStore<any>({
   reducer: {
     blogs: blogsSlice.reducer,
     user: userSlice.reducer
@@ -129,7 +149,7 @@ export const store = configureStore({
 })
 
 export const { addBlog, getAllBlogs, likeblog, removeBlog, setBlogs } = blogsSlice.actions
-export const { logWithStorage } = userSlice.actions
+export const { logWithStorage, logOutUser } = userSlice.actions
 
 export type AppDispatch = typeof store.dispatch
 

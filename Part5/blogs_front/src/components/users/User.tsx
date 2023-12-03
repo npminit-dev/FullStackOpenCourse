@@ -1,5 +1,4 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { UserAndBlogs } from "../../types/types";
+import { useLocation, useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 
 const User = () => {

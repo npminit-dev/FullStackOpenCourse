@@ -1,15 +1,12 @@
-import { useContext } from "react";
-import { appContext } from "./contexts/AppContextProvider";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter, useNavigate } from "react-router-dom";
+import 'semantic-ui-css/semantic.min.css'
 import App from "../App";
-import Blogs from "./Blogs";
+import Blogs from "./blogs/Blogs";
 import User from "./users/User";
 import Users from "./users/Users";
-import Blog from "./Blog";
+import Blog from "./blogs/Blog";
 
 const Root = () => {
-
-  const { msg, setmsg, blogs, dispatch, user } = useContext(appContext)
 
   const router = createBrowserRouter([
     {
@@ -26,7 +23,7 @@ const Root = () => {
         },
         {
           path: '/blogs',
-          element: <Blogs blogs={blogs} setmsg={setmsg} token={user.token} user={user}></Blogs>
+          element: <Blogs></Blogs>
         },
         {
           path: '/blog/:id',

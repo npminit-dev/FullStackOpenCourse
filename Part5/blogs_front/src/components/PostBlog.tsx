@@ -1,28 +1,30 @@
-import { FormEvent, useState, useRef, Dispatch, useContext } from 'react';
-import { BlogProps, PostBlogProps } from "../types/types";
-import { post_Blog } from "../utils/userRequests";
+import { FormEvent, useState, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, postBlogAsync } from '../reduxstate/store';
-import { blogsContext } from './contexts/BlogsContextProvider';
+import { appContext } from './contexts/AppContextProvider';
 
-const PostBlog = ({ token, setmsg, user }: PostBlogProps) => {
+const PostBlog = () => {
   const [title, settitle] = useState<string>("");
   const [url, seturl] = useState<string>("");
   const [likes, setlikes] = useState<number>(0);
-  const { dispatchToggleStatus } = useContext(blogsContext)
 
   const dispatch = useDispatch<AppDispatch>()
+  const { user } = useContext(appContext)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     dispatch(postBlogAsync({
-      token,
+      token: user.token,
       blog: {
         title,
         url,
         likes
       }      
-    })).then((res) => dispatchToggleStatus({ type: 'add', payload: res.payload.id }))
+    })).then(() => {
+      settitle('')
+      setlikes(0)
+      seturl('')
+    })
   };
 
   return (

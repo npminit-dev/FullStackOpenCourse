@@ -58,3 +58,21 @@ export const remove_Blog = async (token: string, blogID: string): Promise<AxiosR
     return err
   }
 }
+
+export const commentBlog = async (comment: string, id: string): Promise<AxiosResponse|any> => {
+  try {
+    let requestObj = await axios({
+      method: 'POST',
+      url: `${BASE_URL}/api/blogs/comment/${id}`,
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      data: {
+        commentBody: comment 
+      }
+    })
+    return requestObj
+  } catch(err) {
+    return err
+  }
+}

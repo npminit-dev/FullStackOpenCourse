@@ -8,6 +8,7 @@ const blogSchema = new mongoose.Schema({
   },
   url: String,
   likes: Number,
+  comments: [String]
 });
 
 const userSchema = new mongoose.Schema({
