@@ -3,18 +3,18 @@ import { v4 as uuidv4 } from "uuid";
 import Blog from "./Blog";
 import PropTypes from "prop-types";
 import { useContext, useEffect, useState } from "react";
-import { blogsContext } from "./contexts/BlogsContextProvider";
+import { appContext } from "./contexts/AppContextProvider";
+import { getAllBlogsAsync } from "../reduxstate/store";
+import { Link } from "react-router-dom";
 
-const Blogs = ({ blogs, token, setmsg, user }: BlogsProps) => {
+const Blogs = () => {
 
   const [order, setorder] = useState<'asc'|'desc'>('asc');
-  const { toggleStatus, dispatchToggleStatus } = useContext(blogsContext)
-
+  const { dispatch, blogs, user } = useContext(appContext)
+  
   useEffect(() => {
-    if(!toggleStatus.length && blogs.length) {
-      dispatchToggleStatus({ type: 'initialize', payload: blogs })
-    }
-  }, [blogs])
+    dispatch(getAllBlogsAsync());
+  }, []);
 
   const handleClickSort = () => {
     // setblogs(blogs => {
@@ -43,14 +43,9 @@ const Blogs = ({ blogs, token, setmsg, user }: BlogsProps) => {
       </label>
       <div id="blogscontainer">
         {blogs.map((blog) => (
-          <span key={uuidv4()}>
-            <Blog
-              {...blog}
-              token={token}
-              setmsg={setmsg}
-              user={user}
-            ></Blog>
-          </span>
+          <div key={uuidv4()}>
+            <Link to={`/blog/${blog.id}`}>{ blog.title } - { blog.author.username }</Link>
+          </div>
         ))}
       </div>
     </section>

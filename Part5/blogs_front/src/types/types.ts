@@ -1,3 +1,4 @@
+import { Action, AsyncThunkAction } from "@reduxjs/toolkit"
 import { Dispatch, SetStateAction } from "react"
 
 export type SessionProps = {
@@ -18,6 +19,17 @@ export type ToggleProps = {
 export type User = {
   name: string,
   username: string,
+}
+
+export type UserAndBlogs = {
+  name: string,
+  username: string,
+  blogs: Array<{
+    author: string,
+    title: string,
+    url: string,
+    likes: number
+  }>
 }
 
 export type LoginBasicData = {
@@ -88,17 +100,10 @@ export type removeBlogsAsyncType = {
 
 // context
 
-export type contextType = {
-  toggleStatus: toggleStatus[],
-  dispatchToggleStatus: Dispatch<Action>
+export type AppContextType = {
+  msg: Message|null,
+  setmsg: Dispatch<SetStateAction<Message|null>>,
+  dispatch: Dispatch<AsyncThunkAction<any, any, any>>,
+  blogs: BlogProps[],
+  user: User&{token:string},
 }
-export type toggleStatus = {
-  id: string,
-  status: boolean
-}
-export type State = toggleStatus[];
-export type Action =
-  | { type: "initialize"; payload: BlogProps[] }
-  | { type: "add", payload: string }
-  | { type: "remove"; payload: string }
-  | { type: "toggle"; payload: string };

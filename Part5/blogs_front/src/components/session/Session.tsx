@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SessionProps } from "../../types/types";
 import LogIn from "./LogIn";
 import { AppDispatch, logWithStorage } from "../../reduxstate/store";
 import { useDispatch } from "react-redux";
 import UserInfo from "./UserInfo";
+import { appContext } from "../contexts/AppContextProvider";
 
-const Session = ({ user }: SessionProps) => {
-  const dispatch = useDispatch<AppDispatch>();
+const Session = () => {
+
+  const { dispatch, user } = useContext(appContext)
   const [visible, setvisible] = useState(false);
 
   useEffect(() => {
-    dispatch(logWithStorage());
+    dispatch(logWithStorage() as any);
   }, []);
 
   return (

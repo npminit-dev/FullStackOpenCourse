@@ -1,14 +1,15 @@
 import { LoginProps } from "../../types/types";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { log_in } from "../../utils/userRequests";
 import { AxiosStatic } from "axios";
 import { useDispatch } from "react-redux";
-import { AppDispatch, loginAsync } from "../../reduxstate/store";
+import { loginAsync } from '../../reduxstate/store';
+import { appContext } from "../contexts/AppContextProvider";
 
 const Login = () => {
   const [username, setusername] = useState<string>("");
   const [password, setpassword] = useState<string>("");
-  const dispatch = useDispatch<AppDispatch>();
+  const { dispatch } = useContext(appContext)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

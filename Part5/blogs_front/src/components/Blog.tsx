@@ -1,76 +1,65 @@
-import type { BlogProps, toggleStatus } from '../types/types'
-import Toggle from './Toggle'
-import { like_Blog, remove_Blog } from '../utils/userRequests'
-import { useDispatch } from 'react-redux'
-import { AppDispatch, likeBlogAsync, removeBlogAsync } from '../reduxstate/store'
+import { likeBlogAsync, removeBlogAsync } from '../reduxstate/store'
+import { useLocation, useParams } from 'react-router-dom'
+import { appContext } from './contexts/AppContextProvider'
 import { useContext, useEffect, useState } from 'react'
-import { blogsContext } from './contexts/BlogsContextProvider'
+import { BlogProps } from '../types/types'
 
-
-const Blog = (props: BlogProps): JSX.Element => {
+const Blog = (): JSX.Element => {
   
-  const findState = (ts: toggleStatus[]) => ts.find(st => st.id === props.id)?.status || false
-
-  const { toggleStatus, dispatchToggleStatus } = useContext(blogsContext)
-  const [status, setstatus] = useState<boolean>(findState(toggleStatus));
-  
-  useEffect(() => {
-    setstatus(
-      findState(toggleStatus)
-    )
-  }, [toggleStatus]);
+  const { id } = useParams()
+  const [blogdata, setblogdata] = useState<BlogProps|null>()
+  const { dispatch, user , blogs} = useContext(appContext)
 
   useEffect(() => {
-    console.log(props.author)
-  }, [props])
-
-  const dispatch = useDispatch<AppDispatch>()
+    setblogdata(b => blogs.find(blog => blog.id === id))
+  }, [blogs])
 
   const handleLikeIncrement = async (): Promise<any> => {
-    dispatch(likeBlogAsync({
-      token: props.token || '',
-      id: props.id,
-      likes: props.likes + 1
+    blogdata && dispatch(likeBlogAsync({
+      token: user.token || '',
+      id: blogdata?.id,
+      likes: blogdata?.likes + 1
     }))
   }
 
   const handleRemove = async (): Promise<any> => {
-    dispatch(removeBlogAsync({
-      token: props.token || '',
-      id: props.id
-    })).then(() => dispatchToggleStatus({ type: 'remove', payload: props.id }))
+    blogdata && dispatch(removeBlogAsync({
+      token: user.token || '',
+      id: blogdata.id
+    }))
   }
 
   return (
     <>
-      <div className="blogbox">
-        <span className='authorbox'>Author: {props.author.username}</span>
-        <span className='titlebox'>Title: {props.title}</span>
-        <Toggle showtext="DETAILS" hidetext="HIDE DETAILS" shown={status} parentId={props.id}>
-          <span className='urlbox'>URL: {props.url}</span>
-          <span className='likesbox'>
-            Likes: {props.likes}
-            {
-            props.token !== null &&
-            <button
-              className='likebutton'
-              title="Like blog Button"
-              type="button"
-              onClick={async () => await handleLikeIncrement()}
-            >LIKE</button>
-            }
-            {
-            (props.author.username === props.user?.username) && props.token !== null
-              ? <button
-              onClick={async () => await handleRemove()}
-              title="Remove blog button"
-              type="button"
-            >REMOVE</button>
-              : <></>
-            }
-          </span>
-        </Toggle>
+      {
+        blogdata && 
+        <div>
+        <div>Author: {blogdata.author.username}</div>
+        <div>Title: {blogdata.title}</div>        
+        <div>URL: {blogdata.url}</div>
+        <div>
+          Likes: {blogdata.likes}
+          {
+          user.token !== null &&
+          <button
+            className='likebutton'
+            title="Like blog Button"
+            type="button"
+            onClick={async () => await handleLikeIncrement()}
+          >LIKE</button>
+          }
+          {
+          (blogdata.author.username === user.username) && user.token !== null
+            ? <button
+            onClick={async () => await handleRemove()}
+            title="Remove blog button"
+            type="button"
+          >REMOVE</button>
+            : <></>
+          }
+        </div>
       </div>
+      }
       <hr></hr>
     </>
   )

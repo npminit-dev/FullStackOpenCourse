@@ -55,4 +55,11 @@ userRouter.post('/users/login', async (req, res) => {
   } else throw new Error('Incorrect password')
 })
 
+// get all users and blogs:
+
+userRouter.get('/users/blogs', async (req, res) => {
+  let users = await userModel.find({}, {name: 1, username: 1}).populate('blogs')
+  res.status(200).send(users)
+})
+
 module.exports = userRouter

@@ -55,9 +55,9 @@ POST http://localhost:3003/api/users/signin
 Content-Type: application/json
 
 {
-  "username": "MMasi",
+  "username": "Richard Harrison",
   "name": "Michael Masi",
-  "password": "uzumymw"
+  "password": "pawnstarts"
 }
 
 ###
@@ -70,6 +70,10 @@ Content-Type: application/json
   "username": "MMasi",
   "password": "uzumymw"
 }
+
+###
+
+GET http://localhost:3003/api/users/blogs
 
 ###
 

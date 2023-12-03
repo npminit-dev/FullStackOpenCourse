@@ -34,6 +34,8 @@ blogRouter.delete('/blogs/:id', async (req, res) => {
   for(const ps_id of ps.blogs) if(id === ps_id.toString()) found = true
   if(!found) throw new Error('Error: The blog was not found for the indicated user')
   let newStatus = await blogModel.findOneAndDelete({ _id: new mongoose.Types.ObjectId(id.toString()) })
+  let newBlogList = ps.blogs.filter(person => JSON.stringify(person) !== JSON.stringify(id))
+  await userModel.updateOne({_id: new mongoose.Types.ObjectId(ps.id)}, {blogs: newBlogList})
   if(!newStatus) throw new Error('Error: blog not deleted')
   res.status(200).send(newStatus)
 })
