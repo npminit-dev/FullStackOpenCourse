@@ -1,7 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
 import { useContext, useState } from "react";
 import { appContext } from "../contexts/AppContextProvider";
-import { AppDispatch, getAllBlogsAsync, setBlogs } from "../../reduxstate/store";
+import {
+  AppDispatch,
+  getAllBlogsAsync,
+  setBlogs,
+} from "../../reduxstate/store";
 import { Link } from "react-router-dom";
 import PostBlog from "../PostBlog";
 import { BlogProps } from "../../types/types";
@@ -12,7 +16,7 @@ const Blogs = () => {
   const [order, setorder] = useState<"asc" | "desc">("asc");
   const [loading, setloading] = useState<boolean>(false);
   const { blogs, user } = useContext(appContext);
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   const sortBlogs = (
     blogs: BlogProps[],
@@ -29,21 +33,21 @@ const Blogs = () => {
   };
 
   const handleReload = () => {
-    setloading(true)
-    dispatch(getAllBlogsAsync())
-      .then(() => setloading(false))
-  }
+    setloading(true);
+    dispatch(getAllBlogsAsync()).then(() => setloading(false));
+  };
 
   return (
     <section>
-      {user.username && user.token ? 
-      <PostBlog></PostBlog> : <></>}
+      {user.username && user.token ? <PostBlog></PostBlog> : <></>}
       <Divider horizontal>
-        <span>bloglist</span>
+        <span>{"<bloglist/>"}</span>
       </Divider>
       <div className="low-margin-container">
         <Button
-          compact circular primary
+          compact
+          circular
+          primary
           onClick={handleClickSort}
           title="Sort by likes"
           size="medium"
@@ -56,7 +60,9 @@ const Blogs = () => {
           </Button.Content>
         </Button>
         <Button
-          compact circular secondary
+          compact
+          circular
+          secondary
           name="refreshBlogs"
           title="Refresh bloglist"
           size="medium"
@@ -67,16 +73,23 @@ const Blogs = () => {
             <Icon name="refresh"></Icon>
           </Button.Content>
         </Button>
-      </div>      
-      <List size="large" divided animated={true} className="low-padding-container">
+      </div>
+      <List
+        size="big"
+        divided
+        animated={true}
+        className="low-padding-container"
+      >
         {blogs.map((blog) => (
           <List.Item key={uuidv4()}>
             <List.Icon name="newspaper outline"></List.Icon>
             <List.Content>
               <Link to={`/blog/${blog.id}`} className="link-without-blue">
-                <strong>{blog.title}</strong> - <i>{blog.author.username}</i>
+                {blog.title} - <i>{blog.author.username}</i>
                 <br></br>
-                Likes: {blog.likes} - Comments: {blog.comments.length}
+                <span className="medium-font secondary-font">
+                  Likes: {blog.likes} - Comments: {blog.comments.length}
+                </span>
               </Link>
             </List.Content>
           </List.Item>

@@ -31,6 +31,10 @@ button {
   font-size: 15px;
 }
 
+.secondary-font {
+  color: grey
+}
+
 .low-margin-container {
   margin: 5px 0px !important;
 }
