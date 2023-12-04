@@ -6,7 +6,7 @@ import Messages from "./components/Messages";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { appContext } from "./components/contexts/AppContextProvider";
 import SiteHeader from "./components/SiteHeader";
-import { Container, Grid } from "semantic-ui-react";
+import { Container, Grid, Tab } from "semantic-ui-react";
 
 function App(): React.ReactNode {
   const { msg, user } = useContext(appContext)
@@ -15,6 +15,17 @@ function App(): React.ReactNode {
   useEffect(() => {
     navigate('/blogs')
   }, []);
+
+  const handleTabChange = (idx: any) => {
+    switch(idx) {
+      case 0: 
+        navigate('/blogs');
+        break;
+      case 1:
+        navigate('/users')
+        break;
+    }
+  }
 
   return (
     <div id="app">
@@ -37,9 +48,12 @@ function App(): React.ReactNode {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <Link to="/users"><div>USERS</div></Link>
-      <Link to='/blogs'><div>BLOGS</div></Link>
-      <Outlet></Outlet>
+      <Tab panes={
+      [
+        { menuItem: 'BLOGS', render: () => <Tab.Pane><Outlet></Outlet></Tab.Pane> },
+        { menuItem: 'USERS', render: () => <Tab.Pane><Outlet></Outlet></Tab.Pane> },
+      ]} renderActiveOnly={true}
+      onTabChange={(_, {activeIndex}) => handleTabChange(activeIndex)}></Tab>
     </div>
   );
 }

@@ -1,68 +1,87 @@
-import { FormEvent, useState, useContext } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch, postBlogAsync } from '../reduxstate/store';
-import { appContext } from './contexts/AppContextProvider';
+import { FormEvent, useState, useContext } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch, postBlogAsync } from "../reduxstate/store";
+import { appContext } from "./contexts/AppContextProvider";
+import { Accordion, Form, Icon } from "semantic-ui-react";
 
 const PostBlog = () => {
   const [title, settitle] = useState<string>("");
   const [url, seturl] = useState<string>("");
   const [likes, setlikes] = useState<number>(0);
+  const [dropped, setdropped] = useState<boolean>(false)
 
-  const dispatch = useDispatch<AppDispatch>()
-  const { user } = useContext(appContext)
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useContext(appContext);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    dispatch(postBlogAsync({
-      token: user.token,
-      blog: {
-        title,
-        url,
-        likes
-      }      
-    })).then(() => {
-      settitle('')
-      setlikes(0)
-      seturl('')
-    })
+    dispatch(
+      postBlogAsync({
+        token: user.token,
+        blog: { title,  url,  likes },
+      })
+    ).then(() => {
+      settitle("");
+      setlikes(0);
+      seturl("");
+    });
+  };
+
+  const clearFields = () => {
+    return () => {
+      settitle((title) => "");
+      seturl((url) => "");
+      setlikes((likes) => 0);
+    };
   };
 
   return (
     <>
-      <form id="postblogform" onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input
-            value={title}
-            className="titleinput"
-            required
-            onChange={({ target }) => settitle(target.value)}
-          ></input>
-        </label>
-        <label>
-          URL:
-          <input
-            value={url}
-            className="urlinput"
-            required
-            onChange={({ target }) => seturl(target.value)}
-          ></input>
-        </label>
-        <label>
-          LIKES:
-          <input
-            value={likes}
-            className="likesinput"
-            onChange={({ target }) => setlikes(parseInt(target.value))}
-            type="number"
-          ></input>
-        </label>
-        <button id="postblog" type="submit">POST</button>
-      </form>
+      <Accordion styled>
+        <Accordion.Title
+          active={!dropped}
+          onClick={() => setdropped(!dropped)}
+        >
+          <Icon circular name="dropdown"></Icon>
+          Post one...
+        </Accordion.Title>
+        <Accordion.Content active={dropped}>
+          <Form id="postblogform" onSubmit={handleSubmit}>
+            <Form.Input
+              label={"Title"}
+              value={title}
+              required
+              pattern=".{4,30}"
+              onChange={({ target }) => settitle(target.value)}
+            ></Form.Input>
+            <Form.Input
+              label={"URL"}
+              value={url}
+              required
+              pattern=".{4,30}"
+              onChange={({ target }) => seturl(target.value)}
+            ></Form.Input>
+            <Form.Input
+              label={"Likes"}
+              value={likes}
+              required
+              pattern=".{4,30}"
+              type="number"
+              onChange={({ target }) => setlikes(parseInt(target.value))}
+            ></Form.Input>
+            <Form.Group>
+              <Form.Button type="submit" primary>
+                Post
+              </Form.Button>
+              <Form.Button type="button" secondary onClick={clearFields()}>
+                Clear
+              </Form.Button>
+            </Form.Group>
+          </Form>
+        </Accordion.Content>
+      </Accordion>
     </>
   );
 };
 
 export default PostBlog;
-
-

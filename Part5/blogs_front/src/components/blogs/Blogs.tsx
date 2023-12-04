@@ -24,7 +24,6 @@ const Blogs = () => {
 
   return (
     <section>
-      <hr></hr>
       {
         user.username && user.token ?
         <PostBlog></PostBlog> : <></>

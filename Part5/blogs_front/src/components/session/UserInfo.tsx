@@ -12,7 +12,13 @@ const UserInfo = ({ username, name }: User) => {
   return (
     <Card>
       <Card.Content>
-        <Image floated="right" src={imgRef.current} circular bordered className="no-margin"></Image>
+        <Image
+          floated="right"
+          src={imgRef.current}
+          circular
+          bordered
+          className="no-margin"
+        ></Image>
         <Card.Header>{username}</Card.Header>
         <Card.Meta>{name}</Card.Meta>
         <Button animated size="medium" onClick={() => dispatch(logOutUser())}>
@@ -28,13 +34,3 @@ const UserInfo = ({ username, name }: User) => {
 
 export default UserInfo;
 
-const algo = `
-<button
-            type="button"
-            name="logOut"
-            title="log out"
-            onClick={() => dispatch(logOutUser())}
-          >
-            Log out
-          </button>
-`;
