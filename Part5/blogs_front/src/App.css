@@ -23,6 +23,28 @@ button {
   margin: 0 !important;
 }
 
+.small-font {
+  font-size: 12px;
+}
+
+.medium-font {
+  font-size: 15px;
+}
+
+.low-margin-container {
+  margin: 5px 0px !important;
+}
+
+.low-padding-container {
+  padding: 5px 0px !important;
+}
+
+.link-without-blue {
+  color: #333;
+}
+
+
+
 * {
   font-family: 'Lato', sans-serif;
   box-sizing: border-box;

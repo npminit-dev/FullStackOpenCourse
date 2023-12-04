@@ -6,7 +6,7 @@ import Messages from "./components/Messages";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { appContext } from "./components/contexts/AppContextProvider";
 import SiteHeader from "./components/SiteHeader";
-import { Container, Grid, Tab } from "semantic-ui-react";
+import { Container, Divider, Grid, Tab } from "semantic-ui-react";
 
 function App(): React.ReactNode {
   const { msg, user } = useContext(appContext)
