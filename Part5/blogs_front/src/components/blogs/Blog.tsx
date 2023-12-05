@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { BlogProps } from "../../types/types";
 import { useDispatch } from "react-redux";
 import { Button, Label, Table } from "semantic-ui-react";
+import Comments from "./Comments";
 
 const Blog = (): JSX.Element => {
   const [blogdata, setblogdata] = useState<BlogProps | null>();
@@ -114,6 +115,9 @@ const Blog = (): JSX.Element => {
               icon='trash'
             ></Button>
           )}
+          {
+            id && <Comments comments={blogdata?.comments} id={id}></Comments>
+          }
         </>
       )}
     </>

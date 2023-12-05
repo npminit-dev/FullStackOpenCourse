@@ -10,7 +10,7 @@ export const decodeJWT = (token: string): User | Error => {
   }
 };
 
-export const getRandomCat = () =>
+export const getRandomCat = (size: number) =>
   `https://robohash.org/${Math.round(
     Math.random() * 1000
-  )}/?set=set4&size=75x75`;
+  )}/?set=set4&size=${size}x${size}`;

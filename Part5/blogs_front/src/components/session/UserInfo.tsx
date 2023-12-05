@@ -7,7 +7,7 @@ import { getRandomCat } from "../../utils/utils";
 
 const UserInfo = ({ username, name }: User) => {
   const dispatch = useDispatch<AppDispatch>();
-  const imgRef = useRef<string>(getRandomCat());
+  const imgRef = useRef<string>(getRandomCat(75));
 
   return (
     <Card>

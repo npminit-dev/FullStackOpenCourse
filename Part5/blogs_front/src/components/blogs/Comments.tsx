@@ -1,52 +1,44 @@
-import { useState } from "react";
 import { v4 } from "uuid";
-import { AppDispatch, commentBlogAsync } from "../../reduxstate/store";
+import { AppDispatch } from "../../reduxstate/store";
 import { useDispatch } from "react-redux";
+import { Comment } from "semantic-ui-react";
+import CommentForm from "./CommentForm";
+import { useRef } from "react";
 
-const Comments = ({ comments, id }: { comments: Array<string>, id: string }) => {
-  const dispatch = useDispatch<AppDispatch>()
-  const [comment, setcomment] = useState<string>("");
-
-  const handleSubmitComment = (value: string) => {
-    if (!value.trim()) console.log("Empty value");
-    else {
-      dispatch(commentBlogAsync({
-        comment: value,
-        id
-      })).then(() => setcomment(''))
-    }
-  };
+const Comments = ({
+  comments,
+  id,
+}: {
+  comments: Array<string>;
+  id: string;
+}) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const oldRef = useRef<number>(comments.length - 1);
 
   return (
-    <div>
-      <div>
-        <u>Comments</u>
-      </div>
-      <form onSubmit={(e) => { 
-        e.preventDefault()
-        handleSubmitComment(comment) 
-      }}>
-        <label>
-          Insert new:
-          <input
-            type="text"
-            name="commentInput"
-            required
-            pattern=".{3,500}"
-            value={comment}
-            onChange={(e) => setcomment(e.target.value)}
-          ></input>
-          <button
-            type="submit"
-            title="Submit comment"
-          >ADD</button>
-        </label>
-      </form>
-      {comments.map((comment) => (
-        <div key={v4()}>
-          <i>- {comment}</i>
+    <div className="high-margin-container low-padded-container">
+      {comments.length ? (
+        <Comment.Group>
+          {comments.map((comment, i) => (
+            <Comment key={v4()}>
+              <Comment.Metadata
+                content={
+                  i <= oldRef.current
+                  ? `${Math.round(Math.random() * 100)} days ago`
+                  : "Just now"
+                }
+              />
+              <Comment.Content content={comment} />
+            </Comment>
+          ))}
+        </Comment.Group>
+      ) : (
+        <div className="centered-content high-margin-container">
+          This post doesn't have comments... why do you haven't post one yet?
         </div>
-      ))}
+      )}
+
+      <CommentForm id={id}></CommentForm>
     </div>
   );
 };

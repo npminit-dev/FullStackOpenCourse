@@ -13,10 +13,10 @@ button {
 
 .centered-content {
   display: flex !important;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+  width: 100% !important;
 }
 
 .no-margin {
@@ -37,6 +37,10 @@ button {
 
 .low-margin-container {
   margin: 5px 0px !important;
+}
+
+.high-margin-container {
+  margin: 20px 0 !important;
 }
 
 .low-padding-container {
