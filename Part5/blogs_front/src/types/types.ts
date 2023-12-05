@@ -9,6 +9,10 @@ export type LoginProps = {
   user: User&{token: string}
 }
 
+export type SignInProps = {
+  setpage:Dispatch<SetStateAction<'login'|'signin'>>
+}
+
 export type ToggleProps = {
   showtext: string,
   hidetext: string,
@@ -34,6 +38,12 @@ export type UserAndBlogs = {
 
 export type LoginBasicData = {
   username: string,
+  password: string
+}
+
+export type SignInBasicData = {
+  name: string,
+  username: string, 
   password: string
 }
 

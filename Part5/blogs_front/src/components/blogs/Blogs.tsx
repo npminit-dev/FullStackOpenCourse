@@ -40,13 +40,9 @@ const Blogs = () => {
   return (
     <section>
       {user.username && user.token ? <PostBlog></PostBlog> : <></>}
-      <Divider horizontal>
-        <span>{"<bloglist/>"}</span>
-      </Divider>
       <div className="low-margin-container">
         <Button
           compact
-          circular
           primary
           onClick={handleClickSort}
           title="Sort by likes"
@@ -61,7 +57,6 @@ const Blogs = () => {
         </Button>
         <Button
           compact
-          circular
           secondary
           name="refreshBlogs"
           title="Refresh bloglist"
@@ -75,8 +70,7 @@ const Blogs = () => {
         </Button>
       </div>
       <List
-        size="big"
-        divided
+        size="medium"
         animated={true}
         className="low-padding-container"
       >

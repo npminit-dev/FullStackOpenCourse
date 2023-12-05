@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter, useNavigate } from "react-router-d
 import 'semantic-ui-css/semantic.min.css'
 import App from "../App";
 import Blogs from "./blogs/Blogs";
-import User from "./users/User";
+import User from "./users/UserPosts";
 import Users from "./users/Users";
 import Blog from "./blogs/Blog";
 

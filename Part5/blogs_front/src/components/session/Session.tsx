@@ -7,39 +7,18 @@ import { appContext } from "../contexts/AppContextProvider";
 const Session = () => {
 
   const { dispatch, user } = useContext(appContext)
-  const [visible, setvisible] = useState(false);
-
+  
   useEffect(() => {
     dispatch(logWithStorage() as any);
   }, []);
 
   return (
     <section>
-      USER SESSION
-      <div>
-        {visible ? (
-          <>
-            {!user || !user.token ? (
-              <LogIn></LogIn>
-            ) : (
-              <UserInfo name={user.name} username={user.username}></UserInfo>
-            )}
-            <button
-              title="hide"
-              type="button"
-              onClick={() => setvisible(false)}
-            >
-              HIDE
-            </button>
-          </>
+      <div>   
+        {!user || !user.token ? (
+          <LogIn></LogIn>
         ) : (
-          <>
-            <button
-              title="show"
-              type="button"
-              onClick={() => setvisible(true)}
-            >SHOW</button>
-          </>
+          <UserInfo name={user.name} username={user.username}></UserInfo>
         )}
       </div>
     </section>

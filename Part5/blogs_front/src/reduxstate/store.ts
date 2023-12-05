@@ -1,7 +1,8 @@
 import { configureStore, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { commentBlog, get_Blogs, like_Blog, log_in, post_Blog, remove_Blog } from '../utils/userRequests.js'
-import { BlogProps, CommentType, LoginBasicData, User, likePostAsyncType, postAsyncType, removeBlogsAsyncType } from '../types/types.js';
+import { comment_Blog, get_Blogs, get_User_Blogs, like_Blog, log_in, post_Blog, remove_Blog, sign_in } from '../utils/userRequests.js'
+import { BlogProps, CommentType, LoginBasicData, SignInBasicData, User, likePostAsyncType, postAsyncType, removeBlogsAsyncType } from '../types/types.js';
 import { decodeJWT } from '../utils/utils.js';
+import { UserAndBlogs } from '../types/types';
 
 export const getAllBlogsAsync = createAsyncThunk(
   'blogs/getAllBlogsAsync',
@@ -44,7 +45,7 @@ export const removeBlogAsync = createAsyncThunk(
 export const commentBlogAsync = createAsyncThunk(
   'blogs/commentBlogAsync',
   async (data: CommentType) => {
-    let result = await commentBlog(data.comment, data.id)
+    let result = await comment_Blog(data.comment, data.id)
     return {id: data.id, comments: result.data.comments}
   }
 )
@@ -65,6 +66,32 @@ export const loginAsync = createAsyncThunk(
       console.log(err)
       return
     } 
+  }
+)
+
+export const signInAsync = createAsyncThunk(
+  'user/signin',
+  async (data: SignInBasicData) => {
+    try {
+      let result = await sign_in(data)
+      return result
+    } catch(err) {
+      console.log(err)
+      return
+    }
+  }
+)
+
+export const getUsersBlogsAsync = createAsyncThunk(
+  'userblogs',
+  async () => {
+    try {
+      let result = await get_User_Blogs()
+      return result.data
+    } catch(err) {
+      console.log(err)
+      return []
+    }
   }
 )
 
@@ -118,6 +145,21 @@ export const blogsSlice = createSlice({
   }
 })
 
+export const userBlogsSlice = createSlice({
+  name: 'userblogs',
+  initialState: [] as UserAndBlogs[],
+  reducers: {
+    setUserAndBlogs: function(state, action) {
+      return action.payload
+    }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getUsersBlogsAsync.fulfilled, (state, action) => {
+      return action.payload
+    })
+  }
+})
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: {name: '', username: '', token: ''} as User&{token:string},
@@ -138,18 +180,23 @@ export const userSlice = createSlice({
     builder.addCase(loginAsync.fulfilled, (state, action) => {
       return action.payload
     })
+    builder.addCase(signInAsync.fulfilled, (state, action) => {
+      return action.payload
+    })
   }
 })
 
 export const store = configureStore<any>({
   reducer: {
     blogs: blogsSlice.reducer,
-    user: userSlice.reducer
+    user: userSlice.reducer,
+    userblogs: userBlogsSlice.reducer
   }
 })
 
 export const { addBlog, getAllBlogs, likeblog, removeBlog, setBlogs } = blogsSlice.actions
 export const { logWithStorage, logOutUser } = userSlice.actions
+export const { setUserAndBlogs } = userBlogsSlice.actions
 
 export type AppDispatch = typeof store.dispatch
 

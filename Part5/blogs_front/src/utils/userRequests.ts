@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BlogProps, LoginBasicData } from '../types/types'
+import { BlogProps, LoginBasicData, SignInBasicData } from '../types/types'
 
 export const BASE_URL = 'http://localhost:3003'
 
@@ -12,6 +12,22 @@ export const log_in = async ({ username, password }: LoginBasicData): Promise<Ax
       }
     )
     return requestObj
+  } catch(err) {
+    return err
+  }
+}
+
+export const sign_in = async (data: SignInBasicData): Promise<AxiosResponse|any> => {
+  try {
+    let requestObj = await axios({
+      method: 'POST',
+      url: `${BASE_URL}/api/users/signin`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: JSON.stringify(data)
+    })
+    return requestObj.data
   } catch(err) {
     return err
   }
@@ -59,7 +75,7 @@ export const remove_Blog = async (token: string, blogID: string): Promise<AxiosR
   }
 }
 
-export const commentBlog = async (comment: string, id: string): Promise<AxiosResponse|any> => {
+export const comment_Blog = async (comment: string, id: string): Promise<AxiosResponse|any> => {
   try {
     let requestObj = await axios({
       method: 'POST',
@@ -71,6 +87,15 @@ export const commentBlog = async (comment: string, id: string): Promise<AxiosRes
         commentBody: comment 
       }
     })
+    return requestObj
+  } catch(err) {
+    return err
+  }
+}
+
+export const get_User_Blogs = async (): Promise<AxiosResponse|any> => {
+  try {
+    let requestObj = await axios.get(`${BASE_URL}/api/users/blogs`)
     return requestObj
   } catch(err) {
     return err

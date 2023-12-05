@@ -47,7 +47,18 @@ button {
   color: #333;
 }
 
+.placeholder {
+  min-height: 100px;
+}
 
+.max-widthed {
+  max-width: 100% !important;
+}
+
+.splitted {
+  display: flex;
+  justify-content: space-between;
+}
 
 * {
   font-family: 'Lato', sans-serif;
