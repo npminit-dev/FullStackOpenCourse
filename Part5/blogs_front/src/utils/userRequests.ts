@@ -32,14 +32,15 @@ export const get_Blogs = () => {
   return axios.get(`${BASE_URL}/api/mix/blogs`);
 };
 
-export const post_Blog = async (token: string, blog: Partial<BlogProps>) => {
-  return axios.post(`${BASE_URL}/api/blogs`, {
+export const post_Blog = async (token: string, blog: Partial<BlogProps>): Promise<AxiosResponse> => {
+  let requestObj = await axios.post(`${BASE_URL}/api/blogs`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `bearer: ${token}`,
     },
     data: JSON.stringify(blog),
   });
+  return requestObj
 };
 
 export const like_Blog = async (
@@ -65,17 +66,13 @@ export const like_Blog = async (
 export const remove_Blog = async (
   token: string,
   blogID: string
-): Promise<AxiosResponse | any> => {
-  try {
-    let requestObj = axios.delete(`${BASE_URL}/api/blogs/${blogID}`, {
-      headers: {
-        Authorization: `bearer: ${token}`,
-      },
-    });
-    return requestObj;
-  } catch (err) {
-    return err;
-  }
+): Promise<AxiosResponse> => {
+  let requestObj = axios.delete(`${BASE_URL}/api/blogs/${blogID}`, {
+    headers: {
+      Authorization: `bearer: ${token}`,
+    },
+  });
+  return requestObj;
 };
 
 export const comment_Blog = async (

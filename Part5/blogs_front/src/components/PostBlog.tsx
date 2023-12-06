@@ -1,6 +1,6 @@
 import { FormEvent, useState, useContext } from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch, postBlogAsync } from "../reduxstate/store";
+import { AppDispatch, postBlogAsync, setMessage } from "../reduxstate/store";
 import { appContext } from "./contexts/AppContextProvider";
 import { Accordion, Divider, Form, Icon, Transition } from "semantic-ui-react";
 
@@ -15,17 +15,32 @@ const PostBlog = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    dispatch(setMessage({ msg: "We are posting yout blog", type: "loading" }));
     dispatch(
       postBlogAsync({
         token: user.token,
         blog: { title, url, likes },
       })
-    ).then(() => {
-      settitle("");
-      setlikes(0);
-      seturl("");
-      setdropped(false);
-    });
+    )
+      .then(() => {
+        clearFields()();
+        dispatch(
+          setMessage({
+            msg: "Your post has successfully created!",
+            type: "success",
+          })
+        );
+        setdropped(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(
+          setMessage({
+            msg: "We couldn't post your blog, try again later",
+            type: "error",
+          })
+        );
+      });
   };
 
   const clearFields = () => {

@@ -116,6 +116,9 @@ const blogsSlice = createSlice({
     builder.addCase(postBlogAsync.fulfilled, (state, action) => {
       state.push(action.payload)
     })
+    builder.addCase(postBlogAsync.rejected, (state, action) => {
+      throw new Error(action.error.message)
+    })
     builder.addCase(likeBlogAsync.fulfilled, (state, action) => {
       return state.map(blog => {
         if(blog.id === action.payload) return { ...blog, likes: blog.likes + 1 }
@@ -124,6 +127,9 @@ const blogsSlice = createSlice({
     })
     builder.addCase(removeBlogAsync.fulfilled, (state, action) => {
       return state.filter(blog => blog.id !== action.payload.id)
+    })
+    builder.addCase(removeBlogAsync.rejected, (state, action) => {
+      throw new Error(action.error.message)
     })
     builder.addCase(commentBlogAsync.fulfilled, (state, action) => {
       return state.map(blog => {
