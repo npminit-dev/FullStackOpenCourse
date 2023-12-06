@@ -9,27 +9,32 @@ import SiteHeader from "./components/SiteHeader";
 import { Container, Divider, Grid, Tab } from "semantic-ui-react";
 
 function App(): React.ReactNode {
-  const { msg, user } = useContext(appContext)
-  const navigate = useNavigate()
+  const { msg, user } = useContext(appContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    navigate('/blogs')
+    navigate("/blogs");
   }, []);
 
   const handleTabChange = (idx: any) => {
-    switch(idx) {
-      case 0: 
-        navigate('/blogs');
+    switch (idx) {
+      case 0:
+        navigate("/blogs");
         break;
       case 1:
-        navigate('/users')
+        navigate("/users");
         break;
     }
-  }
+  };
 
   return (
     <div id="app">
-      <Grid divided='vertically' stackable={true} verticalAlign="middle" className="no-margin">
+      <Grid
+        divided="vertically"
+        stackable={true}
+        verticalAlign="middle"
+        className="no-margin"
+      >
         <Grid.Row columns={2}>
           <Grid.Column width={6}>
             <Container fluid={false}>
@@ -38,9 +43,8 @@ function App(): React.ReactNode {
           </Grid.Column>
           <Grid.Column width={6} floated="right">
             <Container fluid={false} className="centered-content">
-              {msg !== null && <Messages msg={msg}></Messages>}
               {!user.token || !user.name ? (
-                <Session/>
+                <Session />
               ) : (
                 <UserInfo {...user}></UserInfo>
               )}
@@ -48,12 +52,29 @@ function App(): React.ReactNode {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <Tab panes={
-      [
-        { menuItem: 'BLOGS', render: () => <Tab.Pane><Outlet></Outlet></Tab.Pane> },
-        { menuItem: 'USERS', render: () => <Tab.Pane><Outlet></Outlet></Tab.Pane> },
-      ]} renderActiveOnly={true}
-      onTabChange={(_, {activeIndex}) => handleTabChange(activeIndex)}></Tab>
+      <Messages></Messages>
+      <Tab
+        panes={[
+          {
+            menuItem: "BLOGS",
+            render: () => (
+              <Tab.Pane>
+                <Outlet></Outlet>
+              </Tab.Pane>
+            ),
+          },
+          {
+            menuItem: "USERS",
+            render: () => (
+              <Tab.Pane>
+                <Outlet></Outlet>
+              </Tab.Pane>
+            ),
+          },
+        ]}
+        renderActiveOnly={true}
+        onTabChange={(_, { activeIndex }) => handleTabChange(activeIndex)}
+      ></Tab>
     </div>
   );
 }

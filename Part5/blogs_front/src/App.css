@@ -69,15 +69,17 @@ button {
   box-sizing: border-box;
 }
 
-.msg {
-  animation: appear_msg 5s linear forwards
+.msg-animation {
+  animation: disappear_msg 5000ms cubic-bezier(.8,-0.01,.91,.25) forwards
 }
 
-@keyframes appear_msg {
+@keyframes disappear_msg {
   from {
-    display: block;
+    
   }
   to {
+    transform: translateZ(-200px);
+    filter: opacity(0);
     display: none
   }
 }

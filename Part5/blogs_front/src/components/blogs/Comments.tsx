@@ -33,8 +33,10 @@ const Comments = ({
           ))}
         </Comment.Group>
       ) : (
-        <div className="centered-content high-margin-container">
-          This post doesn't have comments... why do you haven't post one yet?
+        <div className="centered-content high-margin-container secondary-font">
+          <span className="high-margin-container">
+            <i>This post doesn't have comments... why do you haven't post one yet?</i>
+          </span>
         </div>
       )}
 

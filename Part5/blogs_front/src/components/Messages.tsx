@@ -1,25 +1,53 @@
-import { useRef, useEffect } from "react";
 import { MessageProps } from "../types/types";
-import '../App.css'
+import "../App.css";
+import { Icon, Message, Transition } from "semantic-ui-react";
+import { useSelector } from "react-redux";
+import { Component, useEffect, useRef } from "react";
 
-const Messages = ({ msg }: MessageProps) => {
+const Messages = () => {
 
-  const msgElem = useRef<HTMLParagraphElement|null>(null)
+  const message = useSelector((data: any) => data.messages) as MessageProps|null
+  const msgRef = useRef<HTMLDivElement|null>(null)
 
   useEffect(() => {
-    msgElem.current?.getAnimations().forEach(anim => {
-      anim.cancel()
-      anim.play()
-    })
-  }, [msg]);
-
-  return ( 
-    <>
-    {
-      msg ? <p className="msg" ref={msgElem}>{ msg.msg }</p> : <></>
+    if(msgRef.current) {
+      msgRef.current.getAnimations().forEach(anim => {
+        anim.finish()
+        anim.play()
+      })
     }
-    </>
+  }, [message])
+
+  return (
+    message && 
+    <div ref={msgRef} className="msg-animation high-margin-container">
+      <Message
+        icon
+        hidden={message === null}
+        error={message.type === "error"}
+        success={message.type === "success"}
+        info={message.type === 'info'}
+    >
+      <Icon loading={message.type === 'loading'} name={
+        message.type === 'error' ? 'warning sign' :
+        message.type === 'success' ? 'check circle' :
+        message.type === 'info' ? 'info' : 
+        'circle notched'
+      }></Icon>
+      <Message.Content>
+        <Message.Header>
+        {
+          message.type === 'error' ? 'Ups...' :
+          message.type === 'success' ? 'Done!' :
+          message.type === 'info' ? 'Info' :
+          'Wait a moment...'
+        }
+        </Message.Header>
+        {message?.msg || ''}
+      </Message.Content>
+    </Message>
+    </div>
   );
-}
- 
+};
+
 export default Messages;

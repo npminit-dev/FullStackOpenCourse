@@ -19,6 +19,7 @@ const Users = () => {
   }, []);
 
   const getAvgLikes = (blogs: UserAndBlogs["blogs"]): number => {
+    if(!blogs.length) return 0
     return (
       blogs.reduce((acc, curr) => {
         acc += curr.likes;
@@ -69,7 +70,7 @@ const Users = () => {
                 <Table.Cell>{userblog.name}</Table.Cell>
                 <Table.Cell>{userblog.blogs.length}</Table.Cell>
                 <Table.Cell>
-                  {getAvgLikes(userblog.blogs).toFixed(2) || <i>No data</i>}
+                  {getAvgLikes(userblog.blogs).toFixed(2)}
                 </Table.Cell>
                 <Table.Cell>
                   #{getRank(userblogs, userblog.username)}

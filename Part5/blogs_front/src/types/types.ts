@@ -76,6 +76,13 @@ export type BlogProps = {
   toggleStatus: boolean
 }
 
+export type RemoveBlogProps = {
+  modalopen: boolean,
+  setmodalopen: Dispatch<SetStateAction<boolean>>,
+  setremoveload: Dispatch<SetStateAction<boolean>>,
+  blogdata: BlogProps|null
+}
+
 export type PostBlogProps = {
   user: User,
   token: string,
@@ -83,7 +90,8 @@ export type PostBlogProps = {
 }
 
 export type MessageProps = {
-  msg: Message|null
+  msg: string,
+  type: 'info'|'success'|'error'|'loading'
 }
 
 export type StoreProps = {

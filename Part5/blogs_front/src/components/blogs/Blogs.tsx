@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { appContext } from "../contexts/AppContextProvider";
 import {
   AppDispatch,
@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import PostBlog from "../PostBlog";
 import { BlogProps } from "../../types/types";
-import { Button, Divider, Icon, List } from "semantic-ui-react";
+import { Button, Dimmer, Icon, List, Loader } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
 
 const Blogs = () => {
@@ -17,6 +17,12 @@ const Blogs = () => {
   const [loading, setloading] = useState<boolean>(false);
   const { blogs, user } = useContext(appContext);
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    setloading(true)
+    dispatch(getAllBlogsAsync())
+      .then(() => setloading(false))
+  }, []);
 
   const sortBlogs = (
     blogs: BlogProps[],
@@ -69,26 +75,29 @@ const Blogs = () => {
           </Button.Content>
         </Button>
       </div>
-      <List
-        size="medium"
-        animated={true}
-        className="low-padding-container"
-      >
-        {blogs.map((blog) => (
-          <List.Item key={uuidv4()}>
-            <List.Icon name="newspaper outline"></List.Icon>
-            <List.Content>
-              <Link to={`/blog/${blog.id}`} className="link-without-blue">
-                {blog.title} - <i>{blog.author.username}</i>
-                <br></br>
-                <span className="medium-font secondary-font">
-                  Likes: {blog.likes} - Comments: {blog.comments.length}
-                </span>
-              </Link>
-            </List.Content>
-          </List.Item>
-        ))}
-      </List>
+      {!loading ? (
+        <List size="medium" animated={true} className="low-padding-container">
+          {blogs.map((blog) => (
+            <List.Item key={uuidv4()} className="low-margin-container">
+              <List.Icon name="at" color="blue"></List.Icon>
+              <List.Content>
+                <Link to={`/blog/${blog.id}`} className="link-without-blue">
+                  {blog.title} - <i>{blog.author.username}</i>
+                  <br></br>
+                  <span className="small-font secondary-font">
+                    {blog.likes} likes - {blog.comments.length} comments
+                  </span>
+                </Link>
+              </List.Content>
+            </List.Item>
+          ))}
+        </List>
+      ) : (
+      <div className="centered-content max-widthed">
+        <Loader active inline>Re-fetching blogs</Loader>
+      </div>
+
+      )}
     </section>
   );
 };

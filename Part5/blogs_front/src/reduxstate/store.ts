@@ -1,8 +1,9 @@
 import { configureStore, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { comment_Blog, get_Blogs, get_User_Blogs, like_Blog, log_in, post_Blog, remove_Blog, sign_in } from '../utils/userRequests.js'
-import { BlogProps, CommentType, LoginBasicData, SignInBasicData, User, likePostAsyncType, postAsyncType, removeBlogsAsyncType } from '../types/types.js';
+import { BlogProps, CommentType, LoginBasicData, MessageProps, SignInBasicData, User, likePostAsyncType, postAsyncType, removeBlogsAsyncType } from '../types/types.js';
 import { decodeJWT } from '../utils/utils.js';
 import { UserAndBlogs } from '../types/types';
+import { AxiosResponse } from 'axios';
 
 export const getAllBlogsAsync = createAsyncThunk(
   'blogs/getAllBlogsAsync',
@@ -51,34 +52,24 @@ export const commentBlogAsync = createAsyncThunk(
 )
 
 export const loginAsync = createAsyncThunk(
-  'user/login',
-  async (data: LoginBasicData) => {
-    try {
-      let result = await log_in(data)
-      localStorage.setItem('lsssstkn', result.data)
-      let userdata: any = decodeJWT(result.data)
-      return { 
-        name: userdata.name, 
-        username: userdata.username, 
-        token: result.data 
-      }
-    } catch(err) {
-      console.log(err)
-      return
-    } 
+  "user/login",
+  async (data: LoginBasicData, thunkApi) => {
+    let result = await log_in(data) as AxiosResponse;
+    localStorage.setItem("lsssstkn", result.data);
+    let userdata: any = decodeJWT(result.data);
+    return {
+      name: userdata.name,
+      username: userdata.username,
+      token: result.data,
+    };
   }
-)
+);
 
 export const signInAsync = createAsyncThunk(
   'user/signin',
-  async (data: SignInBasicData) => {
-    try {
-      let result = await sign_in(data)
-      return result
-    } catch(err) {
-      console.log(err)
-      return
-    }
+  async (data: SignInBasicData) => {    
+    await sign_in(data)
+    return
   }
 )
 
@@ -96,7 +87,7 @@ export const getUsersBlogsAsync = createAsyncThunk(
 )
 
 
-export const blogsSlice = createSlice({
+const blogsSlice = createSlice({
   name: 'blogs',
   initialState: [] as BlogProps[],
   reducers: {
@@ -145,7 +136,7 @@ export const blogsSlice = createSlice({
   }
 })
 
-export const userBlogsSlice = createSlice({
+const userBlogsSlice = createSlice({
   name: 'userblogs',
   initialState: [] as UserAndBlogs[],
   reducers: {
@@ -160,7 +151,7 @@ export const userBlogsSlice = createSlice({
   }
 })
 
-export const userSlice = createSlice({
+const userSlice = createSlice({
   name: 'user',
   initialState: {name: '', username: '', token: ''} as User&{token:string},
   reducers: {
@@ -180,23 +171,45 @@ export const userSlice = createSlice({
     builder.addCase(loginAsync.fulfilled, (state, action) => {
       return action.payload
     })
+    builder.addCase(loginAsync.rejected, (state, action) => {
+      throw new Error(action.error.message)
+    })
     builder.addCase(signInAsync.fulfilled, (state, action) => {
       return action.payload
     })
+    builder.addCase(signInAsync.rejected, (state, action) => {
+      throw new Error(action.error.message)
+    })
   }
 })
+
+const messageSlice = createSlice({
+  name: 'messages',
+  initialState: null as MessageProps|null,
+  reducers: {
+    setMessage: function(_, action) {
+      return action.payload
+    },
+    removeMessage: function() {
+      return null
+    }
+  }
+})
+
 
 export const store = configureStore<any>({
   reducer: {
     blogs: blogsSlice.reducer,
     user: userSlice.reducer,
-    userblogs: userBlogsSlice.reducer
+    userblogs: userBlogsSlice.reducer,
+    messages: messageSlice.reducer
   }
 })
 
 export const { addBlog, getAllBlogs, likeblog, removeBlog, setBlogs } = blogsSlice.actions
 export const { logWithStorage, logOutUser } = userSlice.actions
 export const { setUserAndBlogs } = userBlogsSlice.actions
+export const { setMessage, removeMessage } = messageSlice.actions
 
 export type AppDispatch = typeof store.dispatch
 
