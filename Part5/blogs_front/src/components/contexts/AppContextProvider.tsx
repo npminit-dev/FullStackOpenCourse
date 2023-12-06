@@ -6,6 +6,8 @@ import { AppContextType, BlogProps, Message, StoreProps, User } from "../../type
 const defValues: AppContextType = {
   msg: {msg: '', type: 'info'},
   setmsg: () => null,
+  tabindex: 0,
+  settabindex: () => null,
   blogs: [],
   dispatch: () => null,
   user: {name: '', username: '', token: ''},
@@ -16,6 +18,7 @@ export const appContext = createContext<AppContextType>(defValues)
 const AppContextProvider = ({children}: PropsWithChildren) => {
 
   const [msg, setmsg] = useState<Message | null>(null);
+  const [tabindex, settabindex] = useState<number|string|undefined>(0);
   const dispatch = useDispatch<any>();
   const blogs = useSelector<StoreProps, BlogProps[]>((state) => state.blogs);
   const user = useSelector<StoreProps, User & { token: string }>(
@@ -31,6 +34,8 @@ const AppContextProvider = ({children}: PropsWithChildren) => {
       value={{
         msg,
         setmsg,
+        tabindex,
+        settabindex,
         dispatch,
         blogs,
         user

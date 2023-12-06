@@ -1,4 +1,4 @@
-import { Button, Confirm, Header, Icon, Modal } from "semantic-ui-react";
+import { Confirm, Header } from "semantic-ui-react";
 import { RemoveBlogProps } from "../../types/types";
 import { useDispatch } from "react-redux";
 import { removeBlogAsync, setMessage } from "../../reduxstate/store";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { appContext } from "../contexts/AppContextProvider";
 
-const RemoveModal = ({
+const RemoveConfirm = ({
   modalopen,
   setmodalopen,
   setremoveload,
@@ -63,4 +63,4 @@ const RemoveModal = ({
   );
 };
 
-export default RemoveModal;
+export default RemoveConfirm;

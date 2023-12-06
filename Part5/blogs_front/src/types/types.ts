@@ -127,6 +127,8 @@ export type removeBlogsAsyncType = {
 export type AppContextType = {
   msg: Message|null,
   setmsg: Dispatch<SetStateAction<Message|null>>,
+  tabindex: number|string|undefined,
+  settabindex: Dispatch<SetStateAction<number|string|undefined>>,
   dispatch: Dispatch<AsyncThunkAction<any, any, any>|Action<any>>,
   blogs: BlogProps[],
   user: User&{token:string},

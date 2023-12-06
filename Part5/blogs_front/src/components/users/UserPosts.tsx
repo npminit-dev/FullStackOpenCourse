@@ -1,11 +1,16 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import { BlogProps, User as UP } from "../../types/types";
 import { Button, Header, List } from "semantic-ui-react";
+import { useContext, useEffect } from "react";
+import { appContext } from "../contexts/AppContextProvider";
 
 const User = () => {
   let { state } = useLocation();
   let navigate = useNavigate();
+  const { settabindex } = useContext(appContext)
+
+  useEffect(() => settabindex(1), [])
 
   return (
     <>
@@ -25,6 +30,7 @@ const User = () => {
                         comments: {blog.comments.length}
                       </List.Description>
                     )}
+                    <Link to={`/blog/${blog.id}`} onClick={() => settabindex(0)}>Redirect to blogs</Link>
                   </List.Content>
                 </List.Item>
               ))}

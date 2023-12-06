@@ -7,7 +7,6 @@ import { Accordion, Divider, Form, Icon, Transition } from "semantic-ui-react";
 const PostBlog = () => {
   const [title, settitle] = useState<string>("");
   const [url, seturl] = useState<string>("");
-  const [likes, setlikes] = useState<number>(0);
   const [dropped, setdropped] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +18,7 @@ const PostBlog = () => {
     dispatch(
       postBlogAsync({
         token: user.token,
-        blog: { title, url, likes },
+        blog: { title, url },
       })
     )
       .then(() => {
@@ -47,7 +46,6 @@ const PostBlog = () => {
     return () => {
       settitle((title) => "");
       seturl((url) => "");
-      setlikes((likes) => 0);
     };
   };
 
@@ -76,14 +74,6 @@ const PostBlog = () => {
                 required
                 pattern=".{4,150}"
                 onChange={({ target }) => seturl(target.value)}
-              ></Form.Input>
-              <Form.Input
-                label={"Likes"}
-                value={likes}
-                required
-                pattern=".{4,30}"
-                type="number"
-                onChange={({ target }) => setlikes(parseInt(target.value))}
               ></Form.Input>
               <Form.Group>
                 <Form.Button type="submit" primary>

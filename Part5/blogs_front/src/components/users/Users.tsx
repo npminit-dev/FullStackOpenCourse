@@ -1,17 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { v4 } from "uuid";
 import { Link } from "react-router-dom";
 import { UserAndBlogs } from "../../types/types";
 import { Dimmer, Loader, Segment, Image, Table } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, getUsersBlogsAsync } from "../../reduxstate/store";
+import { appContext } from "../contexts/AppContextProvider";
 
 const Users = () => {
-  const [loading, setloading] = useState<boolean>(false);
+  const [loading, setloading] = useState<boolean>(true);
   const userblogs = useSelector<any>((data) => data.userblogs) as [];
   const dispatch = useDispatch<AppDispatch>();
+  const { settabindex } = useContext(appContext)
 
   useEffect(() => {
+    settabindex(1)
     setloading(true);
     dispatch(getUsersBlogsAsync())
       .then(() => setloading(false))
@@ -84,7 +87,7 @@ const Users = () => {
                       state={{ ...userblog }}
                     >
                       <strong>
-                        <u>Go to blogs</u>
+                        <u>Bloglist</u>
                       </strong>
                     </Link>
                   }

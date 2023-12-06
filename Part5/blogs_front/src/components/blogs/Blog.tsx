@@ -1,7 +1,6 @@
 import {
   AppDispatch,
   likeBlogAsync,
-  removeBlogAsync,
 } from "../../reduxstate/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { appContext } from "../contexts/AppContextProvider";
@@ -10,17 +9,19 @@ import { BlogProps } from "../../types/types";
 import { useDispatch } from "react-redux";
 import { Button, Label, Table } from "semantic-ui-react";
 import Comments from "./Comments";
-import RemoveModal from "./RemoveModal";
+import RemoveModal from "./RemoveConfirm";
 
 const Blog = (): JSX.Element => {
   const [blogdata, setblogdata] = useState<BlogProps | null>();
   const [likeload, setlikeload] = useState<boolean>(false);
   const [removeload, setremoveload] = useState<boolean>(false);
   const [modalopen, setmodalopen] = useState<boolean>(false);
-  const { user, blogs } = useContext(appContext);
+  const { user, blogs, settabindex } = useContext(appContext);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { id } = useParams();
+
+  useEffect(() => settabindex(0), []);
 
   useEffect(() => {
     setblogdata((b) => blogs.find((blog) => blog.id === id));

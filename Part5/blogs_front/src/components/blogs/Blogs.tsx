@@ -6,7 +6,7 @@ import {
   getAllBlogsAsync,
   setBlogs,
 } from "../../reduxstate/store";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import PostBlog from "../PostBlog";
 import { BlogProps } from "../../types/types";
 import { Button, Dimmer, Icon, List, Loader } from "semantic-ui-react";
@@ -15,10 +15,11 @@ import { useDispatch } from "react-redux";
 const Blogs = () => {
   const [order, setorder] = useState<"asc" | "desc">("asc");
   const [loading, setloading] = useState<boolean>(false);
-  const { blogs, user } = useContext(appContext);
+  const { blogs, user, settabindex } = useContext(appContext);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
+    settabindex(0)
     setloading(true)
     dispatch(getAllBlogsAsync())
       .then(() => setloading(false))
@@ -76,7 +77,7 @@ const Blogs = () => {
         </Button>
       </div>
       {!loading ? (
-        <List size="medium" animated={true} className="low-padding-container">
+        <List size="large" animated={true} className="low-padding-container">
           {blogs.map((blog) => (
             <List.Item key={uuidv4()} className="low-margin-container">
               <List.Icon name="at" color="blue"></List.Icon>
@@ -98,6 +99,7 @@ const Blogs = () => {
       </div>
 
       )}
+      <Outlet></Outlet>
     </section>
   );
 };

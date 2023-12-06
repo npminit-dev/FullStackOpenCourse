@@ -9,7 +9,7 @@ import SiteHeader from "./components/SiteHeader";
 import { Container, Divider, Grid, Tab } from "semantic-ui-react";
 
 function App(): React.ReactNode {
-  const { msg, user } = useContext(appContext);
+  const { msg, user, tabindex, settabindex } = useContext(appContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,8 +72,12 @@ function App(): React.ReactNode {
             ),
           },
         ]}
+        activeIndex={tabindex}
         renderActiveOnly={true}
-        onTabChange={(_, { activeIndex }) => handleTabChange(activeIndex)}
+        onTabChange={(_, { activeIndex }) => {
+          settabindex(activeIndex)
+          handleTabChange(activeIndex)}
+        }
       ></Tab>
     </div>
   );
