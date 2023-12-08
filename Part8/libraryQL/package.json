@@ -1,0 +1,17 @@
+{
+  "name": "libraryql",
+  "version": "1.0.0",
+  "description": "graphql library app",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "dev": "nodemon index.js"
+  },
+  "author": "jorge",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.9.5",
+    "graphql": "^16.8.1",
+    "nodemon": "^3.0.2"
+  }
+}
