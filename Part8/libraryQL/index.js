@@ -6,6 +6,7 @@ const Author = require("./mongodb/schemas/author");
 const mongoose = require("mongoose");
 const { GraphQLError } = require("graphql");
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -108,6 +109,17 @@ mongoose
   you can remove the placeholder query once your first one has been implemented 
 */
 
+let users = [
+  {
+    username: "Jorge Balsamo",
+    favoriteGenre: "Algorithms",
+  },
+  {
+    username: "Nicholas Cage",
+    favoriteGenre: "Optimization",
+  },
+];
+
 const typeDefs = `
   type author {
     name: String!
@@ -124,17 +136,31 @@ const typeDefs = `
     genres: [String!]!
   }
 
+  type user {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+  
+  type token {
+    value: String!
+  }
+
   type Query {
     bookCount: Int
     authorCount: Int
     allbooks(author: String, genre: String): [book!]!
     allauthors: [author!]!
+    allusers: [user!]!
+    me: user
   }
 
   type Mutation {
     addauthor(name: String!, born: Int): [author!]!
     addbook(title: String!, published: Int!, author: String!, genres: [String!]!): [book!]!
     editauthorborn(name: String!, setbornto: Int!): author
+    createuser(username: String!, favoriteGenre: String!): user
+    login(username: String!, password: String!): token
   }
 `;
 
@@ -144,6 +170,10 @@ const resolvers = {
     authorCount: async () => Author.collection.countDocuments(),
     allbooks: async () => Book.find({}),
     allauthors: async () => Author.find({}),
+    allusers: () => users,
+    me: (_, __, context) => {
+      return context.user
+    }
   },
 
   author: {
@@ -168,28 +198,62 @@ const resolvers = {
       }
     },
 
-    addbook: async (_, args) => {
-      if(args.title.length < 4) throw new GraphQLError('BOOK TITLE TOO SHORT')
-      let find = await Author.findOne({ name: args.author })
-      if(!find) throw new GraphQLError('REFERENCED AUTHOR NOT FOUND')
-      let newBook = new Book({ ...args, author: find._id })
+    addbook: async (_, args, context) => {
+      let user = context.user
+      if(!user) throw new GraphQLError('TOKEN NOT FOUND')
+      if (args.title.length < 4) throw new GraphQLError("BOOK TITLE TOO SHORT");
+      let find = await Author.findOne({ name: args.author });
+      if (!find) throw new GraphQLError("REFERENCED AUTHOR NOT FOUND");
+      let newBook = new Book({ ...args, author: find._id });
       try {
-        await newBook.save()
-        return Book.find({})
-      } catch(err) {
+        await newBook.save();
+        return Book.find({});
+      } catch (err) {
         throw new GraphQLError(`ERROR SAVING BOOK: ${err}`);
       }
     },
 
-    editauthorborn: async (_, args) => {
-      let findAuthor = await Author.findOne({ name: args.name })
-      if(!findAuthor) throw new GraphQLError('REFERENCED AUTHOR NOT FOUND')
-      if(!args.setbornto) throw new GraphQLError('BORN DATE NOT PROVIDED')
-      findAuthor.born = args.setbornto
+    editauthorborn: async (_, args, context) => {
+      let user = context.user
+      if(!user) throw new GraphQLError('TOKEN NOT FOUND')
+      let findAuthor = await Author.findOne({ name: args.name });
+      if (!findAuthor) throw new GraphQLError("REFERENCED AUTHOR NOT FOUND");
+      if (!args.setbornto) throw new GraphQLError("BORN DATE NOT PROVIDED");
+      findAuthor.born = args.setbornto;
       try {
-        return findAuthor.save()
-      } catch(err) {
-        throw new GraphQLError(`ERROR UPDATING AUTHOR: ${err}`)
+        return findAuthor.save();
+      } catch (err) {
+        throw new GraphQLError(`ERROR UPDATING AUTHOR: ${err}`);
+      }
+    },
+
+    createuser: async (_, args) => {
+      if (!args.username) throw new GraphQLError("NEW USERNAME NOT PROVIDED");
+      let newUser = {
+        username: args.username,
+        favoriteGenre: args.favoriteGenre || null,
+        id: uuid.v4(),
+      };
+      users.push(newUser);
+      return newUser;
+    },
+
+    login: async (_, args) => {
+      let findUser = users.find(
+        (user) =>
+          user.username === args.username && args.password === "somepassword"
+      );
+      if (!findUser) return null;
+      else {
+        return {
+          value: jwt.sign(
+            JSON.stringify({
+              username: findUser.username,
+              password: "somepassword",
+            }),
+            process.env.SECRET
+          ),
+        };
       }
     },
   },
@@ -202,6 +266,27 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
   listen: { port: 4000 },
-}).then(({ url }) => {
-  console.log(`Server ready at ${url}`);
-});
+  context: async ({ req, res }) => {
+    let user = { user: null }
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("bearer:")
+    ) {
+      let token = req.headers.authorization.substring(7)
+      try {
+        token = jwt.verify(token, process.env.SECRET)
+        let findUser = users.find(
+          (user) => user.username === token.username && token.password === "somepassword"
+        );
+        if (!findUser) return user
+        user.user = findUser
+        return user
+      } catch (err) {
+        throw new GraphQLError(`ERROR VERIFYING AUTH TOKEN: ${err}`)
+      }
+    } else return user
+  },
+})
+  .then((connection) => {
+    console.log(`Server ready at ${connection.url}`)
+})
