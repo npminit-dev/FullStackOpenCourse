@@ -53,7 +53,8 @@ const typeDefs = `
   type Query {
     bookCount: Int
     authorCount: Int
-    allbooks(author: String, genre: String): [book!]!
+    booksbygenre(genre: String): [book!]!
+    getgenres: [String!]!
     allauthors: [author!]!
     allusers: [user!]!
     me: user
@@ -61,7 +62,7 @@ const typeDefs = `
 
   type Mutation {
     addauthor(name: String!, born: Int): [author!]!
-    addbook(title: String!, published: Int!, author: String!, genres: [String!]!): [book!]!
+    addbook(title: String!, published: Int!, author: String!, genres: [String!]!): book
     editauthorborn(name: String!, setbornto: Int!): author
     createuser(username: String!, favoriteGenre: String!): user
     login(username: String!, password: String!): token
@@ -72,7 +73,16 @@ const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
-    allbooks: async () => Book.find({}).populate('author'),
+    booksbygenre: async (_, args) => {
+      if(!args.genre) return Book.find({}).populate('author')
+      return Book.find({ genres: args.genre }).populate('author')
+    },
+    getgenres: async () => {
+      let genres = new Set()
+      let books = await Book.find({})
+      books.forEach(book => book.genres.forEach(genre => genres.add(genre)))
+      return [...genres]
+    },
     allauthors: async () => Author.find({}),
     allusers: () => users,
     me: (_, __, context) => {
@@ -111,7 +121,7 @@ const resolvers = {
       let newBook = new Book({ ...args, author: find._id });
       try {
         await newBook.save();
-        return Book.find({});
+        return newBook
       } catch (err) {
         throw new GraphQLError(`ERROR SAVING BOOK: ${err}`);
       }

@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { decodeToken, isExpired } from "react-jwt";
+import { decodeToken } from "react-jwt";
 import { LOGIN } from "../queries/user";
 
 const Login = ({ show, user, setuser }) => {

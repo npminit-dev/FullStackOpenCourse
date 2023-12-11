@@ -4,7 +4,6 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Session from './components/Session'
 
-
 const App = () => {
   const [page, setPage] = useState('authors')
   const [user, setuser] = useState(null)

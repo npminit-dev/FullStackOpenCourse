@@ -39,7 +39,7 @@ const Authors = (props) => {
                 <tr key={v4()}>
                   <td>{a.name}</td>
                   <td>{a.born || "unknown"}</td>
-                  <td>{a.booksCount || "unknown"}</td>
+                  <td>{a.booksCount}</td>
                 </tr>
               ))}
             </tbody>
