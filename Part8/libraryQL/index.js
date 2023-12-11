@@ -82,7 +82,7 @@ const resolvers = {
 
   author: {
     booksCount: async (root) => {
-      return Book.find({ author: root._id }).length;
+      return (await Book.find({ author: root._id })).length;
     },
   },
 

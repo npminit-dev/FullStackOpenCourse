@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client'
+import { useEffect } from 'react'
 import { ALL_BOOKS } from '../queries/books'
 import { v4 } from 'uuid'
 
@@ -23,7 +24,7 @@ const Books = (props) => {
             {books.data.allbooks.map((a) => (
               <tr key={v4()}>
                 <td>{a.title}</td>
-                <td>{a.author}</td>
+                <td>{a.author.name}</td>
                 <td>{a.published}</td>
               </tr>
             ))}

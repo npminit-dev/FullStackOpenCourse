@@ -26,9 +26,7 @@ const NewBook = (props) => {
 
   const submit = async (event) => {
     event.preventDefault()
-
     addbook({ variables: { title, author, published: parseInt(published), genres } })
-
     setTitle('')
     setPublished('')
     setAuthor('')
@@ -78,7 +76,7 @@ const NewBook = (props) => {
         <div>genres: {genres.join(' ')}</div>
         <button type="submit">create book</button>
       </form>
-      { error && <div>Error fetching the book: { error }</div> }
+      { error && <div>Error fetching the book: { error.message }</div> }
     </div>
   )
 }
