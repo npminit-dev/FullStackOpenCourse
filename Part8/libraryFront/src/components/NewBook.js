@@ -16,9 +16,11 @@ const NewBook = ({ show, actualGenre }) => {
   const [ addbook, { error } ] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_AUTHORS }, { query: GET_GENRES }],
     update: (cache, response) => {
-      cache.updateQuery({ query: GET_BOOKS, variables: { genre: actualGenre } }, (data) => {
-        if(data?.booksbygenre && data?.booksbygenre) 
-          return { booksbygenre: data.booksbygenre.concat(response.data) }
+      genres.concat(null).forEach(genre => {
+        cache.updateQuery({ query: GET_BOOKS, variables: { genre }}, data => 
+          data?.booksbygenre && data?.booksbygenre ? 
+          { booksbygenre: data.booksbygenre.concat(response.data) } : response.data
+        )
       })
     },
     onError: (error) => {
