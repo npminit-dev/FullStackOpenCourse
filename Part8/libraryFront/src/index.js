@@ -5,11 +5,9 @@ import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, split } from '@a
 import { setContext } from "@apollo/client/link/context"
 import { getMainDefinition } from '@apollo/client/utilities'
 import { WebSocketLink } from '@apollo/client/link/ws'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws'
 
-const cli = createClient({
-  
-})
 
 const setAuthBearer = setContext((_, { headers }) => {
   let token = localStorage.getItem('usersessiontkn')
@@ -22,15 +20,12 @@ const setAuthBearer = setContext((_, { headers }) => {
 });
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql'
+  uri: 'http://localhost:4000/'
 })
 
-const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/graphql`,
-  options: {
-    reconnect: true
-  }
-})
+const wsLink = new GraphQLWsLink(createClient({
+  url: 'ws://localhost:4000/'
+}))
 
 const splitLink = split(
   ({ query }) => {
@@ -40,13 +35,13 @@ const splitLink = split(
       definition.operation === 'subscription'
     );
   },
-  wsLink,
-  authLink.concat(httpLink),
+  setAuthBearer.concat(httpLink),
+  setAuthBearer.concat(wsLink),
 )
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: setAuthBearer.concat(link)
+  link: splitLink
 })
 
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -15,3 +15,11 @@ export const UPDATE_BORN = gql`
     }
   }
 `
+
+export const ADDED_BOOK = gql`
+  subscription {
+    addedbook {
+      title published
+    }
+  }
+`

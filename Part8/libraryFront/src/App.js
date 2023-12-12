@@ -4,6 +4,7 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Session from './components/Session'
 import Recomendations from './components/Recomendations'
+import Prueba from './components/Prueba'
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -33,6 +34,7 @@ const App = () => {
       <NewBook show={page === 'add'} actualGenre={genre} />
       <Session user={user} setuser={setuser} show={page === 'session'} />
       {user && <Recomendations show={page === 'recomendations'} favgenre={user.favoriteGenre}></Recomendations>}
+      <Prueba></Prueba>
     </div>
   )
 }

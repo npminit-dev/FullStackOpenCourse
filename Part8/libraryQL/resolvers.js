@@ -52,15 +52,12 @@ const resolvers = {
     },
 
     addbook: async (_, args, context) => {
-      let user = context.user
-      if(!user) throw new GraphQLError('TOKEN NOT FOUND')
-      if (args.title.length < 4) throw new GraphQLError("BOOK TITLE TOO SHORT");
       let find = await Author.findOne({ name: args.author });
       if (!find) throw new GraphQLError("REFERENCED AUTHOR NOT FOUND");
       let newBook = new Book({ ...args, author: find._id });
       try {
         await newBook.save();
-        await pubsub.publish('ADDED_BOOK', { addedbook: newBook })
+        pubsub.publish('ADDED_BOOK', { addedbook: newBook })
         return newBook
       } catch (err) {
         throw new GraphQLError(`ERROR SAVING BOOK: ${err}`);
@@ -68,6 +65,7 @@ const resolvers = {
     },
 
     editauthorborn: async (_, args, context) => {
+      console.log(context)
       let user = context.user
       if(!user) throw new GraphQLError('TOKEN NOT FOUND')
       let findAuthor = await Author.findOne({ name: args.name });
@@ -109,7 +107,9 @@ const resolvers = {
   },
   Subscription: {
     addedbook: {
-      suscribe: () => pubsub.asyncIterator(['ADDED_BOOK'])
+      suscribe: () => {
+        return pubsub.asyncIterator(['ADDED_BOOK'])
+      }
     }
   }
 };

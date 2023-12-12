@@ -6,13 +6,15 @@ const { GraphQLError } = require("graphql");
 require("dotenv").config();
 const { expressMiddleware } = require("@apollo/server/express4");
 const express = require("express");
-const { users } = require('./mongodb/usersarray.js')
-const { createServer } = require('http');
-const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer');
-const { makeExecutableSchema } = require('@graphql-tools/schema');
-const { WebSocketServer } = require('ws');
-const { useServer } = require('graphql-ws/lib/use/ws');
-const cors = require('cors')
+const { users } = require("./mongodb/usersarray.js");
+const { createServer } = require("http");
+const {
+  ApolloServerPluginDrainHttpServer,
+} = require("@apollo/server/plugin/drainHttpServer");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
+const { WebSocketServer } = require("ws");
+const { useServer } = require("graphql-ws/lib/use/ws");
+const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
 mongoose
@@ -21,11 +23,13 @@ mongoose
   .catch((err) => console.log(`error connecting: ${err}`));
 
 const app = express();
-const httpServer = createServer(app)
+app.use(cors());
+const httpServer = createServer(app);
 
-const GraphQLSchema = makeExecutableSchema({typeDefs, resolvers})
+const GraphQLSchema = makeExecutableSchema({ typeDefs, resolvers });
 
-const server = new ApolloServer({ schema: GraphQLSchema,
+const server = new ApolloServer({
+  schema: GraphQLSchema,
   plugins: [
     ApolloServerPluginDrainHttpServer({ httpServer }),
     {
@@ -42,18 +46,18 @@ const server = new ApolloServer({ schema: GraphQLSchema,
 
 const webSocketServer = new WebSocketServer({
   server: httpServer,
-  path: '/graphql'
-})
+  path: "/",
+});
 
 const serverCleanup = useServer({ schema: GraphQLSchema }, webSocketServer);
 
 (async () => {
-  await server.start()
+  await server.start();
 
   app.use(
-    "/graphql",
+    '/',
     express.json(),
-    cors({origin: ['http://localhost:3000', 'http://localhost:4000', 'http://localhost:4000/graphql']}),
+    cors(),
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         let user = { user: null };
@@ -71,6 +75,7 @@ const serverCleanup = useServer({ schema: GraphQLSchema }, webSocketServer);
             );
             if (!findUser) return user;
             user.user = findUser;
+            console.log('User1: ' + user);
             return user;
           } catch (err) {
             throw new GraphQLError(`ERROR VERIFYING AUTH TOKEN: ${err}`);
@@ -80,16 +85,9 @@ const serverCleanup = useServer({ schema: GraphQLSchema }, webSocketServer);
     })
   );
 
-  const port = 4000
+  const port = 4000;
 
   httpServer.listen(port, () => {
-    console.log(`server running at port ${port}`)
-  })
+    console.log(`server running at port ${port}`);
+  });
 })();
-
- 
-
-
-
-
-
