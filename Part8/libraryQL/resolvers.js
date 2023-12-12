@@ -1,6 +1,12 @@
 const uuid = require("uuid");
 const Book = require("./mongodb/schemas/book");
 const Author = require("./mongodb/schemas/author");
+const { users } = require('./mongodb/usersarray.js')
+const { PubSub } = require("graphql-subscriptions");
+const { GraphQLError } = require("graphql");
+const jwt = require("jsonwebtoken");
+
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -54,7 +60,7 @@ const resolvers = {
       let newBook = new Book({ ...args, author: find._id });
       try {
         await newBook.save();
-        pubsub.subscribe('ADDED_BOOK', { addedbook: newBook })
+        await pubsub.publish('ADDED_BOOK', { addedbook: newBook })
         return newBook
       } catch (err) {
         throw new GraphQLError(`ERROR SAVING BOOK: ${err}`);
@@ -101,7 +107,7 @@ const resolvers = {
       };   
     },
   },
-  Suscription: {
+  Subscription: {
     addedbook: {
       suscribe: () => pubsub.asyncIterator(['ADDED_BOOK'])
     }

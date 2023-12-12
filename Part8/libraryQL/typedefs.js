@@ -42,8 +42,8 @@ const typeDefs = `
     login(username: String!, password: String!): token
   }
 
-  type Suscription {
-    addedbook: book!
+  type Subscription {
+    addedbook: book
   }
 `;
 
