@@ -16,11 +16,11 @@ mongoose
 let users = [
   {
     username: "Jorge Balsamo",
-    favoriteGenre: "Algorithms",
+    favoriteGenre: "Suspense",
   },
   {
     username: "Nicholas Cage",
-    favoriteGenre: "Optimization",
+    favoriteGenre: "Drama",
   },
 ];
 
@@ -163,6 +163,7 @@ const resolvers = {
             JSON.stringify({
               username: findUser.username,
               password: "somepassword",
+              favoriteGenre: findUser.favoriteGenre
             }), process.env.SECRET ),
         };
       }

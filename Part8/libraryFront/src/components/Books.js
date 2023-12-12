@@ -4,19 +4,14 @@ import { GET_BOOKS } from '../queries/books'
 import { v4 } from 'uuid'
 import Filters from './Filters'
 
-const Books = (props) => {
-  const [genre, setgenre] = useState(null)
+const Books = ({ show, genre, setgenre }) => {
   const [getbooks, { called, loading, data }] = useLazyQuery(GET_BOOKS)
 
   useEffect(() => {
-    getbooks({ variables: { genre: null }})
-  }, [])
-
-  useEffect(() => {
-    if(genre) getbooks({ variables: { genre } })
+    getbooks({ variables: { genre:genre }})
   }, [genre])
 
-  if(!props.show) return null
+  if(!show) return null
   
   return (
     <>
@@ -31,9 +26,9 @@ const Books = (props) => {
           <table>
             <tbody>
               <tr>
-                <th></th>
-                <th>author</th>
-                <th>published</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Published</th>
               </tr>
               {data.booksbygenre.map((a) => 
                 <tr key={v4()}>

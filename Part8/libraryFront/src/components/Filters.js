@@ -7,6 +7,7 @@ const Filters = ({ setgenre }) => {
 
   return (
     <fieldset>
+      <button onClick={() => setgenre(null)}><b>RESET</b></button>
       {!genres.loading ? (
         genres.data.getgenres.map((genre) => (
           <button key={v4()} onClick={() => setgenre(genre)}>

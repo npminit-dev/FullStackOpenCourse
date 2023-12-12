@@ -6,7 +6,7 @@ import { loadErrorMessages } from "@apollo/client/dev";
 
 loadErrorMessages()
 
-const NewBook = (props) => {
+const NewBook = ({ show, actualGenre }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -14,12 +14,11 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [ addbook, { error } ] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_AUTHORS }, { query: GET_BOOKS }, { query: GET_GENRES }],
+    refetchQueries: [{ query: ALL_AUTHORS }, { query: GET_GENRES }],
     update: (cache, response) => {
-      cache.updateQuery({ query: GET_BOOKS }, ({ booksbygenre }) => {
-        return {
-          booksbygenre: booksbygenre.concat(response.data.addbook),
-        }
+      cache.updateQuery({ query: GET_BOOKS, variables: { genre: actualGenre } }, (data) => {
+        if(data?.booksbygenre && data?.booksbygenre) 
+          return { booksbygenre: data.booksbygenre.concat(response.data) }
       })
     },
     onError: (error) => {
@@ -34,7 +33,7 @@ const NewBook = (props) => {
     }
   })
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
