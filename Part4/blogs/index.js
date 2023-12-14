@@ -11,6 +11,7 @@ const resetRouter = require("./routing/resetRouter");
 const { blogModel } = require("./mongodb/models");
 require("express-async-errors");
 require("dotenv").config();
+const path = require('path')
 
 let app = express();
 
@@ -21,10 +22,12 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+console.log()
+
 app.get("/api/blogs", async (req, res) => {
   let blogs = await blogModel
-    .find({})
-    .populate("author", { username: 1, name: 1 });
+  .find({})
+  .populate("author", { username: 1, name: 1 });
   res.status(200).json(blogs);
 });
 
@@ -44,12 +47,14 @@ app.post("/api/blogs/comment/:id", async (req, res) => {
     { _id: blogID },
     { comments: [...(commentsArray || []), comment] },
     { new: true }
-  );
-  res.status(201).send(result);
-});
-
+    );
+    res.status(201).send(result);
+  });
+  
 app.use("/api", extractPersonMW, blogRouter);
 app.use("/api", errorsMW);
+
+app.use(express.static(path.join(__dirname, 'public/dist')))
 
 app.listen(PORT, () => {
   log.success(`Server running on port ${PORT}`);
