@@ -10,16 +10,6 @@ interface ExerciseMetric {
   explanation: string
 }
 
-/* 
-el número de días
-el número de días de entrenamiento
-el valor objetivo original
-el tiempo promedio calculado
-valor booleano que describe si se alcanzó el objetivo
-una calificación entre los números 1-3 que indica qué tan bien se cumplen las horas. Puedes decidir la métrica por tu cuenta.
-un valor de texto que explique la calificación, puedes inventar las explicaciones
-*/
-
 export const getExerciseMetrics = (weekRegister: number[], target: number): ExerciseMetric => {
   if(!Array.isArray(weekRegister)) throw new Error('First argument must be an array')
   if((Number.isNaN(target) || typeof(target) !== 'number')) throw new Error('Second argument must be of type number')
@@ -32,9 +22,7 @@ export const getExerciseMetrics = (weekRegister: number[], target: number): Exer
 
   let avgTime =  weekRegister.reduce((acc, curr) => acc += curr, 0) / weekRegister.length
 
-  let qualification: qualiType = avgTime >= target ? 3 
-                               : avgTime >= target * .75 ? 2 
-                               : 1
+  let qualy: qualiType = avgTime >= target ? 3 : avgTime >= target * .75 ? 2 : 1
 
   let metrics: ExerciseMetric = {
     days: weekRegister.length,
@@ -42,11 +30,27 @@ export const getExerciseMetrics = (weekRegister: number[], target: number): Exer
     originalTarget: target,
     avgTime,
     targetReached: avgTime >= target,
-    qualification,
-    explanation: qualification === 3 ? 'Great! you have reached your target' 
-               : qualification === 2 ? 'You have overcomed the 75% of the target, but can be improved'
-               : 'Target not reached, come back stronger'
+    qualification: qualy,
+    explanation: qualy === 3 ? 'Great! you have reached your target' : qualy === 2 ? 'You have overcomed the 75% of the target, but can be improved' : 'Target not reached, come back stronger'
   };
 
   return metrics
+}
+
+let args = [...process.argv]
+
+if(args && args.length) {
+  console.log('CLI running script...\n')
+  args = args.slice(2)
+  let weekReg = args.slice(0, args.length - 1)
+  let target: string|number = args.slice(-1)[0]
+  if(isNaN(target as any)) throw new Error('Invalid last argument, must be a number')
+  else target = parseFloat(target)
+  let arrConverted = weekReg.map((day, i) => {
+    if(!isNaN(day as any)) return parseFloat(day)
+    else throw new Error(`Invalid array argument at position ${i}: must ve a number`)
+  })
+  
+  console.log('getExerciseMetrics return value: ')
+  console.log(getExerciseMetrics(arrConverted, target))
 }

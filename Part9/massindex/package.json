@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "exerciseCalc": "node exerciseCalculator",
+    "BMICalc": "node bmiCalculator"
   },
   "author": "jorge",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.10.4"
+  }
 }
