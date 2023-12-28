@@ -1,13 +1,13 @@
 import axios, { AxiosResponse } from "axios";
 import { BlogProps, LoginBasicData, SignInBasicData } from "../types/types";
 
-export const BASE_URL = "https://byteblog.adaptable.app";
+export const BASEURL = "https://byteblog.adaptable.app";
 
 export const log_in = async ({
   username,
   password,
 }: LoginBasicData): Promise<AxiosResponse> => {
-  let requestObj = await axios.post(`${BASE_URL}/api/users/login`, {
+  let requestObj = await axios.post(`${BASEURL}/api/users/login`, {
     headers: { "Content-Type": "application/json" },
     data: JSON.stringify({ username, password }),
   });
@@ -19,7 +19,7 @@ export const sign_in = async (
 ): Promise<AxiosResponse> => {
   let requestObj = await axios({
     method: "POST",
-    url: `${BASE_URL}/api/users/signin`,
+    url: `${BASEURL}/api/users/signin`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -29,11 +29,11 @@ export const sign_in = async (
 };
 
 export const get_Blogs = () => {
-  return axios.get(`${BASE_URL}/api/mix/blogs`);
+  return axios.get(`${BASEURL}/api/mix/blogs`);
 };
 
 export const post_Blog = async (token: string, blog: Partial<BlogProps>): Promise<AxiosResponse> => {
-  let requestObj = await axios.post(`${BASE_URL}/api/blogs`, {
+  let requestObj = await axios.post(`${BASEURL}/api/blogs`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `bearer: ${token}`,
@@ -50,7 +50,7 @@ export const like_Blog = async (
 ): Promise<AxiosResponse | any> => {
   try {
     let requestObj = await axios.patch(
-      `${BASE_URL}/api/blogs/setlikes/${id}?likes=${likes}`,
+      `${BASEURL}/api/blogs/setlikes/${id}?likes=${likes}`,
       {
         headers: {
           Authorization: `bearer: ${token}`,
@@ -67,7 +67,7 @@ export const remove_Blog = async (
   token: string,
   blogID: string
 ): Promise<AxiosResponse> => {
-  let requestObj = axios.delete(`${BASE_URL}/api/blogs/${blogID}`, {
+  let requestObj = axios.delete(`${BASEURL}/api/blogs/${blogID}`, {
     headers: {
       Authorization: `bearer: ${token}`,
     },
@@ -82,7 +82,7 @@ export const comment_Blog = async (
   try {
     let requestObj = await axios({
       method: "POST",
-      url: `${BASE_URL}/api/blogs/comment/${id}`,
+      url: `${BASEURL}/api/blogs/comment/${id}`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -98,7 +98,7 @@ export const comment_Blog = async (
 
 export const get_User_Blogs = async (): Promise<AxiosResponse | any> => {
   try {
-    let requestObj = await axios.get(`${BASE_URL}/api/users/blogs`);
+    let requestObj = await axios.get(`${BASEURL}/api/users/blogs`);
     return requestObj;
   } catch (err) {
     return err;
