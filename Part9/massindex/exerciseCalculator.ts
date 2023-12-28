@@ -39,7 +39,7 @@ export const getExerciseMetrics = (weekRegister: number[], target: number): Exer
 
 let args = [...process.argv]
 
-if(args && args.length) {
+if(args && args.length > 2) {
   console.log('CLI running script...\n')
   args = args.slice(2)
   let weekReg = args.slice(0, args.length - 1)

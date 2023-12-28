@@ -37,7 +37,7 @@ var getExerciseMetrics = function (weekRegister, target) {
 };
 exports.getExerciseMetrics = getExerciseMetrics;
 var args = __spreadArray([], process.argv, true);
-if (args && args.length) {
+if (args && args.length > 2) {
     console.log('CLI running script...\n');
     args = args.slice(2);
     var weekReg = args.slice(0, args.length - 1);

@@ -3,10 +3,10 @@ import React, { useContext, useEffect } from "react";
 import Session from "./components/session/Session";
 import UserInfo from "./components/session/UserInfo";
 import Messages from "./components/Messages";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { appContext } from "./components/contexts/AppContextProvider";
 import SiteHeader from "./components/SiteHeader";
-import { Container, Divider, Grid, Tab } from "semantic-ui-react";
+import { Container, Grid, Tab } from "semantic-ui-react";
 
 function App(): React.ReactNode {
   const { msg, user, tabindex, settabindex } = useContext(appContext);
@@ -79,6 +79,9 @@ function App(): React.ReactNode {
           handleTabChange(activeIndex)}
         }
       ></Tab>
+      <span style={{ position: "absolute", top: '5px', left: '10px', opacity: .4}}>
+        Example user: <span>Username: Dr Nick |</span> <span>Password: 1234</span>
+      </span>
     </div>
   );
 }

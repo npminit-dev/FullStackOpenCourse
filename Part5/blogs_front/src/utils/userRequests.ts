@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { BlogProps, LoginBasicData, SignInBasicData } from "../types/types";
 
-export const BASE_URL = "http://localhost:3003";
+export const BASE_URL = "https://byteblog.adaptable.app";
 
 export const log_in = async ({
   username,
